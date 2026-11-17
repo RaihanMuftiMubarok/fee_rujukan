@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- [Head] start -->
+
+<head>
+    <title>@@title | Mantis Bootstrap 5 Admin Template</title>
+    <!-- [Meta] -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+        content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
+    <meta name="keywords"
+        content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
+    <meta name="author" content="CodedThemes">
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/x-icon" href="../../sneat/assets/img/favicon/favicon.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="../mantis/dist/assets/images/favicon.svg" type="image/x-icon">
+    <!-- [Google Font] Family -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        id="main-font-link">
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="../../mantis/dist/assets/fonts/tabler-icons.min.css">
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="../../mantis/dist/assets/fonts/feather.css">
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="../../mantis/dist/assets/fonts/fontawesome.css">
+    <!-- [Material Icons] https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="../../mantis/dist/assets/fonts/material.css">
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="../../mantis/dist/assets/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="../../mantis/dist/assets/css/style-preset.css">
+
+</head>
+<!-- [Head] end -->
+<!-- [Body] Start -->
+<%- include('../partials/__nav.ejs') %>
+    <section class="pc-container">
+        <div class="container py-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                <div>
+                    <h4 class="mb-1">Impor Data Perujuk</h4>
+                    <p class="text-muted mb-0">
+                        Upload Excel, periksa klasifikasi, lalu simpan ke database.
+                    </p>
+                </div>
+
+                <a href="/perujuk" class="btn btn-outline-secondary btn-sm">
+                    Kembali ke Data Perujuk
+                </a>
+            </div>
+
+            <% if (error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <strong>Terjadi kesalahan:</strong>
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <% if (mode==='upload' ) { %>
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Pilih File Excel</h5>
+
+                                <p class="text-muted">
+                                    File harus berformat .xlsx atau .xls dan memiliki
+                                    header <strong>NAMA PENGIRIM</strong>.
+                                    Maksimal ukuran file 5 MB.
+                                </p>
+
+                                <form action="/perujuk/import/preview" method="POST" enctype="multipart/form-data">
+
+                                    <div class="mb-3">
+                                        <label for="file_excel" class="form-label">
+                                            File Excel
+                                        </label>
+
+                                        <input type="file" name="file_excel" id="file_excel" class="form-control"
+                                            accept=".xlsx,.xls" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        Baca dan Preview Excel
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <% } %>
+
+
+                            <% if (mode==='preview' ) { %>
+                                <div class="alert alert-info">
+                                    <strong>Periksa data sebelum menyimpan.</strong>
+                                    Jenis perujuk diperkirakan berdasarkan kata kunci.
+                                    Koreksi pilihan pada kolom Jenis jika hasilnya tidak sesuai.
+                                </div>
+
+                                <div class="card shadow-sm mb-3">
+                                    <div class="card-body">
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-4">
+                                                <div class="border rounded p-3">
+                                                    <div class="text-muted small">Jumlah data</div>
+                                                    <h4 class="mb-0">
+                                                        <%= rows.length %>
+                                                    </h4>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <div class="border rounded p-3">
+                                                    <div class="text-muted small">Perhatian</div>
+                                                    <p class="mb-0">
+                                                        Data bertanda <strong>Perlu diperiksa</strong>
+                                                        belum dikenali berdasarkan kata kunci.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <form action="/perujuk/import/store" method="POST" id="formImport">
+
+                                            <input type="hidden" name="rowsJson" id="rowsJson"
+                                                value="<%= JSON.stringify(rows) %>">
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped align-middle">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Baris</th>
+                                                            <th>Nama Pengirim</th>
+                                                            <th>Alamat</th>
+                                                            <th>No. Telepon</th>
+                                                            <th>Jenis Perujuk</th>
+                                                            <th>Keterangan</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <% rows.forEach((row, index)=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= row.baris_excel %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= row.nama_perujuk %>
+                                                                        <div class="small text-muted mt-1">
+                                                                            Excel: <%= row.nama_asli_excel %>
+                                                                        </div>
+                                                                </td>
+
+                                                                <td style="min-width: 160px;">
+                                                                    <input type="text" class="form-control field-alamat"
+                                                                        data-index="<%= index %>"
+                                                                        value="<%= row.alamat || '' %>"
+                                                                        placeholder="Alamat">
+                                                                </td>
+
+                                                                <td style="min-width: 160px;">
+                                                                    <input type="text"
+                                                                        class="form-control field-telepon"
+                                                                        data-index="<%= index %>"
+                                                                        value="<%= row.no_telepon || '' %>"
+                                                                        placeholder="Nomor telepon">
+                                                                </td>
+
+                                                                <td style="min-width: 170px;">
+                                                                    <select class="form-select jenis-select"
+                                                                        data-index="<%= index %>" required>
+                                                                        <option value="INDIVIDU"
+                                                                            <%=row.jenis_perujuk==='INDIVIDU'
+                                                                            ? 'selected' : '' %>
+                                                                            >INDIVIDU</option>
+
+                                                                        <option value="INSTANSI"
+                                                                            <%=row.jenis_perujuk==='INSTANSI'
+                                                                            ? 'selected' : '' %>
+                                                                            >INSTANSI</option>
+
+                                                                        <option value="KELOMPOK"
+                                                                            <%=row.jenis_perujuk==='KELOMPOK'
+                                                                            ? 'selected' : '' %>
+                                                                            >KELOMPOK</option>
+                                                                    </select>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= row.keterangan %>
+
+                                                                        <% if (row.perlu_diperiksa) { %>
+                                                                            <span class="badge bg-warning text-dark">
+                                                                                Perlu diperiksa
+                                                                            </span>
+                                                                            <% } else { %>
+                                                                                <span class="badge bg-success">
+                                                                                    Terdeteksi
+                                                                                </span>
+                                                                                <% } %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                                <button type="submit" class="btn btn-success" id="btnSimpan">
+                                                    Simpan ke Database
+                                                </button>
+
+                                                <a href="/perujuk/import" class="btn btn-outline-secondary">
+                                                    Batal / Upload Ulang
+                                                </a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } %>
+
+
+                                    <% if (mode==='result' && hasil) { %>
+                                        <div class="card shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title mb-3">Hasil Impor Excel</h5>
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-3">
+                                                        <div class="border rounded p-3">
+                                                            <div class="text-muted small">Diproses</div>
+                                                            <h4>
+                                                                <%= hasil.total %>
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="border rounded p-3">
+                                                            <div class="text-muted small">Berhasil</div>
+                                                            <h4 class="text-success">
+                                                                <%= hasil.berhasil %>
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="border rounded p-3">
+                                                            <div class="text-muted small">Duplikat</div>
+                                                            <h4 class="text-warning">
+                                                                <%= hasil.duplikat %>
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="border rounded p-3">
+                                                            <div class="text-muted small">Gagal</div>
+                                                            <h4 class="text-danger">
+                                                                <%= hasil.gagal %>
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <% if (hasil.detailGagal.length> 0) { %>
+                                                    <div class="alert alert-warning mt-3">
+                                                        <strong>Data yang gagal disimpan:</strong>
+
+                                                        <ul class="mb-0 mt-2">
+                                                            <% hasil.detailGagal.forEach(item=> { %>
+                                                                <li>
+                                                                    <%= item.nama %> — <%= item.pesan %>
+                                                                </li>
+                                                                <% }) %>
+                                                        </ul>
+                                                    </div>
+                                                    <% } %>
+
+                                                        <div class="d-flex flex-wrap gap-2 mt-3">
+                                                            <a href="/perujuk" class="btn btn-success">
+                                                                Lihat Data Perujuk
+                                                            </a>
+
+                                                            <a href="/perujuk/import" class="btn btn-outline-primary">
+                                                                Impor File Lain
+                                                            </a>
+                                                        </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+        </div>
+    </section>
+    <% if (mode==='preview' ) { %>
+        <script>
+            document.getElementById('formImport').addEventListener('submit', function (event) {
+                const rowsInput = document.getElementById('rowsJson');
+                const rows = JSON.parse(rowsInput.value);
+
+                document.querySelectorAll('.jenis-select').forEach(function (select) {
+                    const index = Number(select.dataset.index);
+                    rows[index].jenis_perujuk = select.value;
+                });
+
+                document.querySelectorAll('.field-alamat').forEach(function (input) {
+                    const index = Number(input.dataset.index);
+                    rows[index].alamat = input.value.trim() || null;
+                });
+
+                document.querySelectorAll('.field-telepon').forEach(function (input) {
+                    const index = Number(input.dataset.index);
+                    rows[index].no_telepon = input.value.trim() || null;
+                });
+
+                rowsInput.value = JSON.stringify(rows);
+
+                const konfirmasi = confirm(
+                    'Simpan ' + rows.length +
+                    ' baris data ke database? Data duplikat akan dilewati.'
+                );
+
+                if (!konfirmasi) {
+                    event.preventDefault();
+                    return;
+                }
+
+                const tombol = document.getElementById('btnSimpan');
+
+                if (tombol) {
+                    tombol.disabled = true;
+                    tombol.textContent = 'Memproses...';
+                }
+            });
+        </script>
+        <% } %>
+
+            <%- include('../partials/__foot.ejs') %>

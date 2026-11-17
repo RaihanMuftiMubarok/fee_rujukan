@@ -1,0 +1,186 @@
+<%- include('../partials/__head.ejs') %>
+<body>
+<div class="container-scroller">
+    <%- include('../partials/__nav.ejs') %>
+    <section class="pc-container">
+        <div class="pc-content">
+            <div class="main-panel w-100">
+                <div class="content-wrapper">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Input Transaksi Fee Rujukan Pasien</h4>
+                                <p class="card-description"> Masukkan data pasien, rujukan, dan status pembayaran fee. </p>
+
+                                <!-- Tampilkan Flash Message Error jika ada -->
+                                <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                                    <div class="alert alert-danger"><%= error %></div>
+                                <% } %>
+
+                                <form action="/transaksi_fee_rujukan/store" method="POST" class="forms-sample">
+                                    
+                                    <div class="row">
+                                        <!-- Nama Pasien -->
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label for="nama_pasien">Nama Pasien <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="nama_pasien" name="nama_pasien" placeholder="Contoh: ROHANA. NY" required>
+                                        </div>
+
+                                        <!-- No. RM -->
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label for="no_rm">No. Rekam Medis (RM)</label>
+                                            <input type="text" class="form-control" id="no_rm" name="no_rm" placeholder="Contoh: 135600">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Status Pasien -->
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="status_pasien">Status Pembayaran Pasien</label>
+                                            <select class="form-control" id="status_pasien" name="status_pasien">
+                                                <option value="BPJS" selected>BPJS</option>
+                                                <option value="UMUM">UMUM</option>
+                                                <option value="BPP">BPP</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Tanggal MRS -->
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="tanggal_mrs">Tanggal Masuk (MRS)</label>
+                                            <input type="date" class="form-control" id="tanggal_mrs" name="tanggal_mrs">
+                                        </div>
+
+                                        <!-- Ruang -->
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="id_ruang">Ruang Perawatan</label>
+                                            <select class="form-control" id="id_ruang" name="id_ruang">
+                                                <option value="" disabled selected>-- Pilih Ruang --</option>
+                                                <% ruang.forEach(r => { %>
+                                                    <option value="<%= r.id_ruang %>"><%= r.nama_ruang %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Nama Perujuk -->
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label for="id_perujuk">Nama Perujuk <span class="text-danger">*</span></label>
+                                            <select class="form-control" id="id_perujuk" name="id_perujuk" required>
+                                                <option value="" disabled selected>-- Pilih Perujuk dari Master --</option>
+                                                <% perujuk.forEach(p => { %>
+                                                    <option value="<%= p.id_perujuk %>"><%= p.nama_perujuk %> (<%= p.jenis_perujuk %>)</option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <!-- Diagnosa (DX) -->
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label for="id_dx">Diagnosa (DX)</label>
+                                            <select class="form-control" id="id_dx" name="id_dx">
+                                                <option value="" disabled selected>-- Pilih DX --</option>
+                                                <% dx.forEach(d => { %>
+                                                    <option value="<%= d.id_dx %>"><%= d.kode_dx %> - <%= d.nama_kategori %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Nominal Fee -->
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label for="nominal_fee">Nominal Fee (Rp) <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control" id="nominal_fee" name="nominal_fee" placeholder="Contoh: 250000" min="0" step="1" required>
+                                        </div>
+
+                                        <!-- Petugas Penerima Rujukan -->
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label for="id_petugas_penerima">Petugas Penerima Rujukan</label>
+                                            <select class="form-control" id="id_petugas_penerima" name="id_petugas_penerima">
+                                                <option value="" disabled selected>-- Pilih Petugas Penerima --</option>
+                                                <% petugas.forEach(pt => { %>
+                                                    <option value="<%= pt.id_petugas %>"><%= pt.nama_petugas %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4">
+                                    <h5 class="text-primary mb-3">Status Pembayaran & Pencairan Fee</h5>
+
+                                    <div class="row">
+                                        <!-- Status Pembayaran (OFFSITE / ONSITE) -->
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="status_pembayaran">Pilih Alur Pembayaran <span class="text-danger">*</span></label>
+                                            <select class="form-control" id="status_pembayaran" name="status_pembayaran" required onchange="toggleOnsiteFields()">
+                                                <option value="OFFSITE" selected>Belum Dicairkan (OFFSITE)</option>
+                                                <option value="ONSITE">Cairkan Sekarang (ONSITE)</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Pilihan Periode (Hanya muncul jika ONSITE) -->
+                                        <div class="form-group col-md-4 mb-3 onsite-field" style="display: none;">
+                                            <label for="id_periode">Pilih Periode Anggaran</label>
+                                            <select class="form-control" id="id_periode" name="id_periode">
+                                                <option value="" disabled selected>-- Pilih Periode --</option>
+                                                <% periode.forEach(pr => { %>
+                                                    <option value="<%= pr.id_periode %>">Tahun <%= pr.tahun %> - Bulan <%= pr.bulan %> (Periode <%= pr.nomor_periode %>)</option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <!-- Petugas Pencair (Hanya muncul jika ONSITE) -->
+                                        <div class="form-group col-md-4 mb-3 onsite-field" style="display: none;">
+                                            <label for="id_petugas_pencair">Petugas yang Mencairkan</label>
+                                            <select class="form-control" id="id_petugas_pencair" name="id_petugas_pencair">
+                                                <option value="" disabled selected>-- Pilih Petugas Pencair --</option>
+                                                <% petugas.forEach(pt => { %>
+                                                    <option value="<%= pt.id_petugas %>"><%= pt.nama_petugas %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Keterangan -->
+                                    <div class="form-group mb-3">
+                                        <label for="keterangan">Keterangan / Catatan</label>
+                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="2" placeholder="Catatan opsional (misal: sudah diambil / readmisi)"></textarea>
+                                    </div>
+
+                                    <!-- Tombol Aksi -->
+                                    <button type="submit" class="btn btn-primary mr-2">Simpan Transaksi</button>
+                                    <a href="/transaksi_fee_rujukan" class="btn btn-light">Batal</a>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Script sederhana untuk menampilkan field periode & pencair jika ONSITE dipilih -->
+<script>
+    function toggleOnsiteFields() {
+        const status = document.getElementById('status_pembayaran').value;
+        const onsiteFields = document.querySelectorAll('.onsite-field');
+        const periodeSelect = document.getElementById('id_periode');
+        const pencairSelect = document.getElementById('id_petugas_pencair');
+
+        if (status === 'ONSITE') {
+            onsiteFields.forEach(el => el.style.display = 'block');
+            periodeSelect.setAttribute('required', 'true');
+            pencairSelect.setAttribute('required', 'true');
+        } else {
+            onsiteFields.forEach(el => el.style.display = 'none');
+            periodeSelect.removeAttribute('required');
+            pencairSelect.removeAttribute('required');
+        }
+    }
+</script>
+
+<%- include('../partials/__foot.ejs') %>
+</body>
+</html>

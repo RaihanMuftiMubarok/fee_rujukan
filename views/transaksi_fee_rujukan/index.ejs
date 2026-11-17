@@ -1,0 +1,157 @@
+<%- include('../partials/__head.ejs') %>
+<body>
+<div class="container-scroller">
+    <%- include('../partials/__nav.ejs') %>
+    <section class="pc-container">
+        <div class="pc-content">
+            <div class="main-panel w-100">
+                <div class="content-wrapper">
+                    <div class="container-fluid mt-3">
+                        <div class="row">
+                            <div class="col-lg-12 grid-margin stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Daftar Transaksi Fee Rujukan Pasien</h4>
+                                        <p class="card-description">Kelola data rujukan masuk (Offsite) dan riwayat pencairan (Onsite).</p>
+                                        
+                                        <a href="/transaksi_fee_rujukan/create" class="btn btn-sm btn-success mb-3">
+                                            <i class="ti-plus"></i> Input Transaksi Baru
+                                        </a>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Tgl MRS</th>
+                                                        <th>Nama Pasien / RM</th>
+                                                        <th>Nama Perujuk</th>
+                                                        <th>Ruang / DX</th>
+                                                        <th>Fee (Rp)</th>
+                                                        <th>Status</th>
+                                                        <th>Penerima</th>
+                                                        <th>Pencair</th>
+                                                        <th>Status Pencairan</th>
+                                                        <th>Periode</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% if (data.length > 0) { %>
+                                                        <% data.forEach((item, index) => { %>
+                                                            <tr>
+                                                                <td><%= index + 1 %></td>
+                                                                <td><%= item.tanggal_mrs ? new Date(item.tanggal_mrs).toLocaleDateString('id-ID') : '-' %></td>
+                                                                <td>
+                                                                    <strong><%= item.nama_pasien %></strong><br>
+                                                                    <small class="text-muted">RM: <%= item.no_rm || '-' %> </small>
+                                                                </td>
+                                                                <td><%= item.nama_perujuk || item.nama_perujuk_excel || '-' %></td>
+                                                                <td>
+                                                                    <%= item.nama_ruang || '-' %><br>
+                                                                    <small class="text-muted">DX: <%= item.nama_dx || '-' %></small>
+                                                                </td>
+                                                                <td><strong>Rp <%= Number(item.nominal_fee || 0).toLocaleString('id-ID') %></strong></td>
+                                                                <td><%= item.status_pasien || item.status_pasien || '-' %></td>
+                                                                <td><%= item.nama_petugas_penerima_master || '-' %></td>
+                                                                <td><%= item.nama_petugas_pencair_master || '-' %></td>
+                                                                <td>
+                                                                    <% if (item.status_pembayaran === 'OFFSITE') { %>
+                                                                        <span class="badge badge-warning text-dark">OFFSITE (Belum Cair)</span>
+                                                                    <% } else { %>
+                                                                        <span class="badge badge-success">ONSITE (Sudah Cair)</span>
+                                                                    <% } %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if (item.status_pembayaran === 'ONSITE') { %>
+                                                                        Periode <%= item.nomor_periode %> (<%= item.bulan %>/<%= item.tahun %>)<br>
+                                                                        
+                                                                    <% } else { %>
+                                                                        <span class="text-muted">-</span>
+                                                                    <% } %>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <!-- Jika OFFSITE, tampilkan tombol Cairkan -->
+                                                                        <% if (item.status_pembayaran === 'OFFSITE') { %>
+                                                                            <button type="button" class="btn btn-sm btn-outline-success mr-2 mb-1" data-bs-toggle="modal" data-bs-target="#cairkanModal<%= item.id_fee %>">
+                                                                                Cairkan
+                                                                            </button>
+                                                                        <% } %>
+
+                                                                        <!-- Tombol Hapus -->
+                                                                        <form action="/transaksi_fee_rujukan/delete/<%= item.id_fee %>" method="POST" onsubmit="return confirm('Yakin ingin menghapus data transaksi pasien ini?')">
+                                                                            <button type="submit" class="btn btn-sm btn-danger mb-1">Hapus</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        <% }) %>
+                                                    <% } else { %>
+                                                        <tr>
+                                                            <td colspan="9" class="text-center">Belum ada data transaksi fee rujukan.</td>
+                                                        </tr>
+                                                    <% } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal Dialog Pencairan Cepat untuk Data Offsite -->
+<% data.forEach(item => { %>
+    <% if (item.status_pembayaran === 'OFFSITE') { %>
+        <div class="modal fade" id="cairkanModal<%= item.id_fee %>" tabindex="-1" aria-labelledby="cairkanModalLabel<%= item.id_fee %>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/transaksi/cairkan/<%= item.id_fee %>" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cairkanModalLabel<%= item.id_fee %>">Proses Pencairan Fee Rujukan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Cairkan fee untuk pasien: <strong><%= item.nama_pasien %></strong> (Nominal: <strong>Rp <%= Number(item.nominal_fee || 0).toLocaleString('id-ID') %></strong>)</p>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_periode">Pilih Periode Pencairan <span class="text-danger">*</span></label>
+                                <select class="form-control" name="id_periode" required>
+                                    <option value="" disabled selected>-- Pilih Periode --</option>
+                                    <% listPeriode.forEach(pr => { %>
+                                        <option value="<%= pr.id_periode %>">Tahun <%= pr.tahun %> - Bulan <%= pr.bulan %> (Periode <%= pr.nomor_periode %>)</option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="id_petugas_pencair">Petugas yang Mencairkan <span class="text-danger">*</span></label>
+                                <select class="form-control" name="id_petugas_pencair" required>
+                                    <option value="" disabled selected>-- Pilih Petugas Pencair --</option>
+                                    <% listPetugas.forEach(pt => { %>
+                                        <option value="<%= pt.id_petugas %>"><%= pt.nama_petugas %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success">Proses Cairkan Sekarang</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } %>
+<% }) %>
+
+<%- include('../partials/__foot.ejs') %>
+</body>
+</html>

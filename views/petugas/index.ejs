@@ -1,0 +1,121 @@
+<%- include('../partials/__head.ejs') %>
+
+    <body>
+        <div class="container-scroller">
+            <!-- partial:partials/_navbar.html -->
+            <%- include('../partials/__nav.ejs') %>
+                <!-- partial -->
+                <section class="pc-container">
+                    <div class="pc-content">
+                        
+                        <div class="main-panel">
+                            <div class="content-wrapper">
+                                <div class="container mt-5">
+                                    <div class="row">
+                                        <div class="col-lg-12 grid-margin stretch-card">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Data Petugas</h4>
+                                                    <a href="/petugas/create" class="btn btn-sm btn-success mb-3">Tambah
+                                                        Petugas</a>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No</th>
+                                                                    
+                                                                    <th>Nama</th>
+                                                                    <th>Bagian</th>
+                                                                    <th>Telepon</th>
+                                                                    <th>status</th>
+                                                                    
+                                                                    
+                                                                    <th colspan="2">Aksi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% for(var i=0; i < data.length; i++) { %>
+                                                                    <tr>
+                                                                        <th scope="row">
+                                                                            <%= (i + 1) %>
+                                                                        </th>
+
+                                                                        <td>
+                                                                            <%= data[i].nama_petugas %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= data[i].bagian %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= data[i].no_telepon %>
+                                                                        </td>
+                                                                        
+                                                                        <td>
+                                                                            <%= data[i].status_aktif %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="/petugas/edit/<%= data[i].id_petugas %>"
+                                                                                class="btn btn-sm btn-warning">Edit</a>
+                                                                            <!-- Tombol untuk trigger modal -->
+                                                                            <button type="button"
+                                                                                class="btn btn-sm btn-danger"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#deleteModal<%= data[i].id_petugas %>">
+                                                                                Delete
+                                                                            </button>
+                                                                        </td>
+                                                                        <!-- Modal Konfirmasi -->
+                                                                        <div class="modal fade"
+                                                                            id="deleteModal<%= data[i].id_petugas %>"
+                                                                            tabindex="-1"
+                                                                            aria-labelledby="deleteModalLabel<%= data[i].id_petugas %>"
+                                                                            aria-hidden="true">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title"
+                                                                                            id="deleteModalLabel<%= data[i].id_petugas %>">
+                                                                                            Konfirmasi Hapus</h5>
+                                                                                        <button type="button"
+                                                                                            class="btn-close"
+                                                                                            data-bs-dismiss="modal"
+                                                                                            aria-label="Close"></button>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+                                                                                        Apakah Anda yakin ingin
+                                                                                        menghapus <b>
+                                                                                            <%= data[i].nama_petugas %>
+                                                                                        </b> dari daftar?
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-secondary"
+                                                                                            data-bs-dismiss="modal">Batal</button>
+                                                                                        <a href="/petugas/delete/<%= data[i].id_petugas %>"
+                                                                                            class="btn btn-danger">Ya,
+                                                                                            Hapus</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </tr>
+                                                                    <% } %>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="d-flex justify-content-start mt-3">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- content-wrapper ends -->
+                    </div>
+                </section>
+                    <!-- container-scroller ends -->
+                    <%- include('../partials/__foot.ejs') %>
+    </body>

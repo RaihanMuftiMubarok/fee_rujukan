@@ -1,0 +1,70 @@
+<%- include('../partials/__head.ejs') %>
+
+    <body>
+        <div class="container-scroller d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+            <!-- partial:partials/_navbar.html -->
+            <!-- partial -->
+            <div class="main-panel w-100">
+                <div class="content-wrapper d-flex align-items-center justify-content-center">
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Edit Data Diagnosa</h4>
+                                <p class="card-description">
+                                    Basic form layout for editing news
+                                </p>
+                                <form action="/dx/update/<%= id %>" method="POST" enctype="multipart/form-data"
+                                    class="forms-sample">
+
+                                    <div class="form-group mb-2">
+                                        <label for="kode_dx">Kode DX</label>
+                                        <input type="text" class="form-control" id="kode_dx" name="kode_dx"
+                                             value="<%= data.kode_dx %>" required>
+                                    </div>
+
+                                    <div class="form-group mb-2">
+                                        <label for="nama_kategori">Nama Kategori</label>
+                                        <input type="text" class="form-control" id="nama_kategori" name="nama_kategori"
+                                             value="<%= data.nama_kategori %>" required>
+                                    </div>
+                                    
+                                    <!-- No Telepon (Diubah typenya menjadi text/tel agar sesuai input angka, tag input ditutup dengan benar) -->
+                                    <div class="form-group mb-3">
+                                        <label for="keterangan">keterangan</label>
+                                        <input type="text" class="form-control" id="keterangan" name="keterangan"
+                                           value="<%= data.keterangan %>">
+                                    </div>
+
+
+                                    
+                                     <!-- Status Aktif -->
+                                    <div class="form-group mb-3">
+                                        <label for="status_aktif">
+                                            Status
+                                        </label>
+
+                                        <select class="form-control" id="status_aktif" name="status_aktif" required>
+                                            <option value="1" <%=String(data.status_aktif)==='1' ? 'selected' : '' %>>
+                                                Aktif
+                                            </option>
+
+                                            <option value="0" <%=String(data.status_aktif)==='0' ? 'selected' : '' %>>
+                                                Nonaktif
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                                    <button type="button" class="btn btn-light" onclick="history.back()">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- container-scroller ends -->
+        <%- include('../partials/__foot.ejs') %>
+    </body>
+
+    </html>

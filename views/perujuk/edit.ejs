@@ -1,0 +1,111 @@
+<%- include('../partials/__head.ejs') %>
+
+    <body>
+        <div class="container-scroller d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+
+            <div class="main-panel w-100">
+                <div class="content-wrapper d-flex align-items-center justify-content-center">
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h4 class="card-title">Edit Data Perujuk</h4>
+                                <p class="card-description">
+                                    Perbarui informasi perujuk.
+                                </p>
+
+                                <form action="/perujuk/update/<%= id %>" method="POST" class="forms-sample">
+
+                                    <!-- Nama Perujuk -->
+                                    <div class="form-group mb-3">
+                                        <label for="nama_perujuk">
+                                            Nama Perujuk
+                                        </label>
+
+                                        <input type="text" class="form-control" id="nama_perujuk" name="nama_perujuk"
+                                            value="<%= data.nama_perujuk || '' %>" maxlength="150" required>
+                                    </div>
+
+                                    <!-- Jenis Perujuk -->
+                                    <div class="form-group mb-3">
+                                        <label for="jenis_perujuk">
+                                            Jenis Perujuk
+                                        </label>
+
+                                        <select class="form-control" id="jenis_perujuk" name="jenis_perujuk" required>
+                                            <option value="INDIVIDU" <%=data.jenis_perujuk==='INDIVIDU' ? 'selected'
+                                                : '' %>>
+                                                Individu
+                                            </option>
+
+                                            <option value="INSTANSI" <%=data.jenis_perujuk==='INSTANSI' ? 'selected'
+                                                : '' %>>
+                                                Instansi
+                                            </option>
+
+                                            <option value="KELOMPOK" <%=data.jenis_perujuk==='KELOMPOK' ? 'selected'
+                                                : '' %>>
+                                                Kelompok
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Nomor Telepon -->
+                                    <div class="form-group mb-3">
+                                        <label for="no_telepon">
+                                            No. Telepon / WhatsApp
+                                        </label>
+
+                                        <input type="text" class="form-control" id="no_telepon" name="no_telepon"
+                                            value="<%= data.no_telepon || '' %>" maxlength="30">
+                                    </div>
+
+                                    <!-- Alamat -->
+                                    <div class="form-group mb-3">
+                                        <label for="alamat">
+                                            Alamat
+                                        </label>
+
+                                        <textarea class="form-control" id="alamat" name="alamat"
+                                            rows="3"><%= data.alamat || '' %></textarea>
+                                    </div>
+
+                                    <!-- Status Aktif -->
+                                    <div class="form-group mb-3">
+                                        <label for="status_aktif">
+                                            Status
+                                        </label>
+
+                                        <select class="form-control" id="status_aktif" name="status_aktif" required>
+                                            <option value="1" <%=String(data.status_aktif)==='1' ? 'selected' : '' %>>
+                                                Aktif
+                                            </option>
+
+                                            <option value="0" <%=String(data.status_aktif)==='0' ? 'selected' : '' %>>
+                                                Nonaktif
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary mr-2">
+                                        Simpan Perubahan
+                                    </button>
+
+                                    <a href="/perujuk" class="btn btn-light">
+                                        Batal
+                                    </a>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <%- include('../partials/__foot.ejs') %>
+    </body>
+
+    </html>

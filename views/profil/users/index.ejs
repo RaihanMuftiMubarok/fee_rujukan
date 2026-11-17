@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Desa Kertasada</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Icon Font Stylesheet -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="../elearning/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="../elearning/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="../elearning/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Template Stylesheet -->
+  <link href="../elearning/css/style.css" rel="stylesheet">
+  <style>
+    body {
+      overflow-x: hidden;
+
+    }
+
+    .dropdown-sid {
+      position: static !important;
+    }
+
+    @media (min-width: 992px) {
+      .dropdown-sid {
+        position: absolute !important;
+        right: 0;
+        left: auto;
+      }
+    }
+
+    .equal-height {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .equal-height .card-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .equal-height img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .equal-height .judul-berita {
+      font-weight: bold;
+      font-size: 1rem;
+      line-height: 1.4;
+      max-height: 3.8em;
+      /* 2 lines */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .equal-height .deskripsi-berita {
+      font-size: 0.875rem;
+      color: #555;
+      max-height: 4.2em;
+      /* 3 lines */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .equal-height .image-wrapper {
+      width: 100%;
+      height: 200px;
+      /* tinggi tetap untuk gambar */
+      overflow: hidden;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .equal-height img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Spinner Start -->
+  <div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <!-- Spinner End -->
+
+
+  <!-- Navbar Start -->
+  <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+    <a href="../" class="navbar-brand d-flex align-items-center px-2 px-lg-4">
+
+      <img class="logo-header me-2" src="../images/logo.jpg" alt="Logo" style="width: 4rem;">
+      <span class="m-0 text-primary fs-4 fw-bold">Desa Kertasada</span>
+    </a>
+
+    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav ms-auto p-4 p-lg-0">
+          <a href="/" class="nav-item nav-link ">Beranda</a>
+          <div class="nav-item dropdown">
+              <a href="#" class="nav-link active dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
+              <div class="dropdown-menu fade-down m-0">
+                  <a href="profil/users" class="dropdown-item active">Profil Desa</a>
+                  <a href="/pemerintah_desa/users" class="dropdown-item">Pemerintah Desa</a>
+                  <a href="/anggota_bpd/users" class="dropdown-item">Data Anggota BPD</a>
+                  <a href="" class="dropdown-item">Data Lembaga Desa</a>
+              </div>
+          </div>
+          <div class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Berita</a>
+              <div class="dropdown-menu fade-down m-0">
+                  <a href="../agenda/users" class="dropdown-item">Agenda</a>
+                  <a href="../berita/users" class="dropdown-item">Berita Desa</a>
+              </div>
+          </div>
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">Produk Hukum</a>
+            <div class="dropdown-menu fade-down m-0">
+                <a href="/produk_hukum/users/peraturan_desa" class="dropdown-item ">Peraturan Desa</a>
+                <a href="/produk_hukum/users/peraturan_kepala_desa" class="dropdown-item ">Peraturan Kepala Desa</a>
+                <a href="/produk_hukum/users/keputusan_kepala_desa" class="dropdown-item">Keputusan Kepala Desa</a>
+            </div>
+        </div>
+          <div class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Layanan</a>
+              <div class="dropdown-menu fade-down m-0 dropdown-sid">
+                  <a href="/layanan/users" class="dropdown-item">Pelayanan Mandiri</a>
+              </div>
+          </div>
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">PPID</a>
+            <div class="dropdown-menu fade-down m-0 dropdown-sid">
+                <a href="/keuangan/users" class="dropdown-item">Info Pengelolaan Keuangan</a>
+                <a href="/ppid/users/" class="dropdown-item">PPID Desa</a>
+                <a href="/ppid/users/seputar_ppid" class="dropdown-item ">Seputar PPID</a>
+            </div>
+        </div>
+
+          <!-- <a href="contact.html" class="nav-item nav-link">Contact</a> -->
+      </div>
+      <!-- <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a> -->
+  </div>
+  </nav>
+  <!-- Navbar End -->
+
+
+  <!-- Header Start -->
+  <div class="container-fluid bg-primary py-5  page-header">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+          <h1 class="display-3 text-white animated slideInDown">Profil Desa</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a class="text-white" href="../">Beranda</a></li>
+              <li class="breadcrumb-item text-white active" aria-current="page">Profil Desa</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Header End -->
+
+
+
+
+
+  <!-- Visi-Misi Section Start -->
+  <div class="container-xxl py-5  px-5 bg-light">
+    <div class="card text-center rounded-3 mb-3">
+      <div class="card-header">
+        <h3 class="fw-bold text-primary">Visi</h3>
+      </div>
+      <div class="card-body">
+
+        <p class="card-text">“ Membangun Masyarakat Kertasada yang Sehat, Sejahtera, Gerak Cepat dan Selalu Tanggap untuk mewujudkan Keadilan dan Kemakmuran        Desa Kertasada ”</p>
+
+      </div>
+
+    </div>
+
+    <div class="card text-center rounded-3">
+      <div class="card-header">
+        <h3 class="fw-bold text-primary">Misi</h3>
+      </div>
+      <div class="card-body text-start">
+
+        <p class="card-text">1.	Mewujudkan dan mengembangkan kegiatan keagamaan untuk menambah keimanan dan ketaqwaan kepada Tuhan Yang Maha Esa.</p>
+        <p class="card-text">2.	Mewujudkan dan mendorong terjadinya usaha-usaha kerukunan antar dan intern warga masyarakat yang disebabkan karena adanya perbedaan agama, keyakinan, organisasi, dan lainnya dalam suasana saling menghargai dan menghormati.</p>
+        <p class="card-text">3.	Menata Pemerintahan Desa Kertasada yang kompak dan bertanggung jawab dalam mengemban amanat masyarakat.</p>
+        <p class="card-text">4.	Meningkatkan pelayanan masyarakat secara terpadu dan serius.</p>
+        <p class="card-text">5.	Menumbuh Kembangkan Kelompok Tani dan Gabungan Kelompok Tani.</p>
+        <p class="card-text">6.	Menumbuhkembangkan usaha kecil dan menengah.</p>
+        <p class="card-text">7.	Mendorong majunya bidang pendidikan baik formal maupun informal yang mudah diakses dan dinikmati seluruh warga masyarakat tanpa terkecuali yang mampu menghasilkan insan intelektual, inovatif dan enterpreneur (wirausahawan).</p>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Visi-Misi Section End -->
+
+  <!-- Sejarah Desa -->
+  <div class="container-xxl py-5  px-5 bg-light">
+    <div class="card  rounded-3 mb-3">
+      <div class="card-header">
+        <h3 class="fw-bold text-primary">Sejarah Desa Kertasada</h3>
+      </div>
+      <div class="card-body">
+        <p><b>Asal Usul Desa</b></p>
+        <p class="card-text">
+          Pada dasarnya sejarah terbentuknya Desa Kertasada secara pasti sampai saat ini tidak ada catatan sejarah yang
+          resmi namun hanya ada suatu peninggalan Raja terdahulu yang tersisa yaitu sebuah Masjid yang bernama Masjid Ke
+          JALA yang konon merupakan tempat persinggahan Raja apabila mau melakukan perjalanan lewat perairan yang
+          melalui pelabuhan Boom di Desa Kertasada. Kini Masjid tersebut berubah nama menjadi Mushollah Al Ma’arif yang
+          tetap aksis ditempati kegiatan seorang muballigh mengajari ngaji anak-anak disekitar lingkungan mushollah
+          tersebut. Kata Kertasada konon berasal dari bahasa Jawa yaitu Kerto dan Sodo yang maknanya Kerto yaitu Raja
+          dan Sodo yaitu Lidi. Makna keseluruhannya yaitu Raja Lidi dan menurut tutur pinisepuh Desa Kertasada dahulu
+          Raja mempunyai senjata ampuh berupa sebuah Lidi/ Sodo yang dapat membunuh musuh apabila tersentuh Sodo
+          tersebut.
+        </p>
+      </div>
+      <div class="card-body">
+        <p><b>Sejarah Pemerintahan Desa</b></p>
+        <p class="card-text">
+          Pemerintahan Desa Kertasada merupakan satu pemerintahan yang ada sejak jaman kerajaan. Sesuai dengan
+          perkembangan keadaan dan kondisi masyarakat maka wilayah pemerintahan awalnya terdiri atas 3 dusun dan atas
+          prakarsa mantan Kepala Desa Kertasada yang bernama AMIRUDIN warga masyarakat disebuah kampung dipindahkan ke
+          suatu tempat bekas gudang garam pemerintahan Belanda yang akhirnya menjadi Kampung yang baru dan menjadi dusun
+          Baru namanya yang sampai saat ini kampung tersebut hanya satu RT dan menjadi satu Dusun.
+        </p>
+        <p>
+          Dusun yang ada yaitu Dusun Boom dari bahasa Belanda yang artinya Pelabuhan, Dusun Baru karena baru, Dusun
+          Kerkop karena ada kerkop atau Tempat Kuburan warga Cina dan Dusun Penatu karena di kampung tersebut tempat
+          Binatu atau tukang cuci karena banyak warga yang menjadi tukang cuci. Jadi ada 4 Dusun dan cuma menjadi 8 RT.
+        </p>
+        <p>Dari Data yang dapat dihimpun oleh Tim Desa maka didapat Daftar nama Kepala Desa Kertasada sebagai berikut :
+        </p>
+        <table class="table">
+          <!-- <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead> -->
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>MURDIYA</td>
+              <td>Dari Tahun -</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>SULIMIN</td>
+              <td>Dari Tahun -</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>MASRAWI</td>
+              <td>Dari Tahun </td>
+            </tr>
+            <tr>
+              <th scope="row">4</th>
+              <td>AMIRUDDIN</td>
+              <td>Dari Tahun ---- s/d 1970</td>
+            </tr>
+            <tr>
+              <th scope="row">5</th>
+              <td>MULAWI
+              </td>
+              <td>Dari Tahun 1970 s/d 1986</td>
+            </tr>
+            <tr>
+              <th scope="row">6</th>
+              <td>MASRIJO</td>
+              <td>Dari Tahun 1986 s/d 2003</td>
+            </tr>
+            <tr>
+              <th scope="row">7</th>
+              <td>H. IMAM MUCHTAR</td>
+              <td>Dari Tahun 2003 s/d 2014</td>
+            </tr>
+            <tr>
+              <th scope="row">8</th>
+              <td>DICKY CANDRA PERMANA, SE</td>
+              <td>Dari Tahun 2014 s/d 2017</td>
+            </tr>
+            <tr>
+              <th scope="row">9</th>
+              <td>SABUWANG</td>
+              <td>Dari Tahun Dari Tahun 2019 s/d 2027</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map Start -->
+  <div class="container-xxl py-5  px-5 bg-light">
+    <div class="card  rounded-3 mb-3">
+      <div class="card-header">
+        <h3 class="fw-bold text-primary">Peta Desa</h3>
+      </div>
+      <div class="container my-5">
+        <div class="ratio ratio-16x9">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13013.514832204508!2d113.89628073212097!3d-7.0400150413160825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd9e480ac28c139%3A0xc1190d26475e9b56!2sKertasada%2C%20Kec.%20Kalianget%2C%20Kabupaten%20Sumenep%2C%20Jawa%20Timur!5e1!3m2!1sid!2sid!4v1754235798031!5m2!1sid!2sid"
+            style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Map End -->
+
+
+  <!-- Footer Start -->
+  <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+      <div class="row g-5">
+        <!-- Kolom 1: Logo dan Tentang Website -->
+        <div class="col-lg-3 col-md-6">
+          <img src="../images/logo.png" alt="Logo Website" class="mb-3 mx-auto d-flex" style="width: 150px;">
+          <p>Sistem Informasi Desa Kertasada adalah portal informasi publik dan layanan online untuk
+            masyarakat Desa Kertasada.</p>
+        </div>
+
+        <!-- Kolom 2: Tautan Utama -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Tautan Utama</h4>
+          <a class="btn btn-link" href="/">Beranda</a>
+          <a class="btn btn-link" href="/profil">Profil</a>
+          <a class="btn btn-link" href="/berita">Berita</a>
+          <a class="btn btn-link" href="/produk-hukum">Produk Hukum</a>
+          <a class="btn btn-link" href="/layanan">Layanan</a>
+          <a class="btn btn-link" href="/sid">SID</a>
+        </div>
+
+        <!-- Kolom 3: Hubungi Kami -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Hubungi Kami</h4>
+          <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+62 852-3311-8970</p>
+          <p class="mb-2"><i class="fa fa-envelope me-3"></i>kertasada@example.com</p>
+          <div class="d-flex pt-2">
+            <a class="btn btn-outline-light btn-social" href="https://wa.me/6287798098663"><i
+                class="fab fa-whatsapp"></i></a>
+            <a class="btn btn-outline-light btn-social"
+              href="https://www.instagram.com/pemdes_kertasada?igsh=ejdxZ3Jiazh5YTNo"><i
+                class="fab fa-instagram"></i></a>
+            <!-- <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-tiktok"></i></a> -->
+            <a class="btn btn-outline-light btn-social"
+              href="https://www.facebook.com/profile.php?id=100094012624083&mibextid=rS40aB7S9Ucbxw6v"><i
+                class="fab fa-facebook"></i></a>
+            <a class="btn btn-outline-light btn-social" href="http://www.youtube.com/@kertasada"><i
+                class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Kolom 4: Alamat -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Alamat</h4>
+          <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Jalan Yos Sudarso No.202 Sumenep
+            Desa Desa Kertasada, Kecamatan Kalianget, Kabupaten Sumenep
+
+            Provinsi Jawa Timur, 69471</p>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        <div class="row">
+          <div class="col-md-12 text-center text-md-center mb-3 mb-md-0">
+            &copy; 2025 Website Resmi <a class="border-bottom" href="#">Desa Kertasada</a>. All
+            Rights
+            Reserved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer End -->
+
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../elearning/lib/wow/wow.min.js"></script>
+  <script src="../elearning/lib/easing/easing.min.js"></script>
+  <script src="../elearning/lib/waypoints/waypoints.min.js"></script>
+  <script src="../elearning/lib/owlcarousel/owl.carousel.min.js"></script>
+
+  <!-- Template Javascript -->
+  <script src="../elearning/js/main.js"></script>
+</body>
+
+</html>

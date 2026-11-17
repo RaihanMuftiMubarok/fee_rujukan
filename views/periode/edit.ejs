@@ -1,0 +1,124 @@
+<%- include('../partials/__head.ejs') %>
+
+<body>
+    <div class="container-scroller d-flex align-items-center justify-content-center"
+         style="min-height: 100vh;">
+
+        <div class="main-panel w-100">
+            <div class="content-wrapper d-flex align-items-center justify-content-center">
+                <div class="col-md-9 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h4 class="card-title">Edit Data Periode</h4>
+                            <p class="card-description">
+                                Perbarui informasi periode fee rujukan.
+                            </p>
+
+                            <form action="/periode/update/<%= id %>"
+                                  method="POST"
+                                  class="forms-sample">
+
+                                <!-- Tahun -->
+                                <div class="form-group mb-3">
+                                    <label for="tahun">
+                                        Tahun <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        id="tahun"
+                                        name="tahun"
+                                        min="2000"
+                                        max="2100"
+                                        step="1"
+                                        value="<%= data.tahun %>"
+                                        required>
+                                </div>
+
+                                <!-- Bulan -->
+                                <div class="form-group mb-3">
+                                    <label for="bulan">
+                                        Bulan <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        id="bulan"
+                                        name="bulan"
+                                        min="1"
+                                        max="12"
+                                        step="1"
+                                        value="<%= data.bulan %>"
+                                        required>
+                                </div>
+
+                                <!-- Nomor Periode -->
+                                <div class="form-group mb-3">
+                                    <label for="nomor_periode">
+                                        Nomor Periode <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        id="nomor_periode"
+                                        name="nomor_periode"
+                                        min="1"
+                                        step="1"
+                                        value="<%= data.nomor_periode %>"
+                                        required>
+                                </div>
+
+                                <!-- Uang Muka -->
+                                <div class="form-group mb-3">
+                                    <label for="uang_muka">
+                                        Uang Muka <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        id="uang_muka"
+                                        name="uang_muka"
+                                        min="1"
+                                        step="1"
+                                        value="<%= data.uang_muka %>"
+                                        required>
+                                </div>
+
+                                <!-- Keterangan -->
+                                <div class="form-group mb-3">
+                                    <label for="keterangan">Keterangan</label>
+
+                                    <textarea
+                                        class="form-control"
+                                        id="keterangan"
+                                        name="keterangan"
+                                        rows="3"
+                                        placeholder="Keterangan tambahan (opsional)"><%= data.keterangan || '' %></textarea>
+                                </div>
+
+                                <!-- Tombol -->
+                                <button type="submit" class="btn btn-primary mr-2">
+                                    Simpan Perubahan
+                                </button>
+
+                                <a href="/periode" class="btn btn-light">
+                                    Batal
+                                </a>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <%- include('../partials/__foot.ejs') %>
+</body>

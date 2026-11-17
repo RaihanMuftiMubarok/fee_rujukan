@@ -1,0 +1,77 @@
+<%- include('../partials/__head.ejs') %>
+
+    <body>
+        <div class="container-scroller d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+            <!-- partial:partials/_navbar.html -->
+            <!-- partial -->
+            <div class="main-panel w-100">
+                <div class="content-wrapper d-flex align-items-center justify-content-center">
+                    <div class="col-md-9 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Input Data Perujuk</h4>
+                                <p class="card-description">
+
+                                </p>
+                                <form action="/perujuk/store" method="POST" 
+                                    class="forms-sample">
+
+                                    <!-- Nama Perujuk -->
+                                    <div class="form-group mb-2">
+                                        <label for="nama_perujuk">Nama Perujuk <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nama_perujuk" name="nama_perujuk"
+                                            placeholder="Masukkan nama perujuk / instansi" required>
+                                    </div>
+
+                                    <!-- Jenis Perujuk (Menggunakan Select Dropdown agar sesuai dengan ENUM database) -->
+                                    <div class="form-group mb-2">
+                                        <label for="jenis_perujuk">Jenis Perujuk <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control" id="jenis_perujuk" name="jenis_perujuk" required>
+                                            <option value="" disabled selected>-- Pilih Jenis Perujuk --</option>
+                                            <option value="INDIVIDU">Individu (Dokter / Bidan / Perorangan)</option>
+                                            <option value="INSTANSI">Instansi (Puskesmas / Klinik / Rumah Sakit)
+                                            </option>
+                                            <option value="KELOMPOK">Kelompok (Tim Driver & Petugas)</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- No Telepon (Diubah typenya menjadi text/tel agar sesuai input angka, tag input ditutup dengan benar) -->
+                                    <div class="form-group mb-3">
+                                        <label for="no_telepon">No. Telepon / WhatsApp</label>
+                                        <input type="text" class="form-control" id="no_telepon" name="no_telepon"
+                                            placeholder="Contoh: 081234567890">
+                                    </div>
+
+                                    <!-- Alamat (Menggunakan textarea karena kolom database berjenis TEXT) -->
+                                    <div class="form-group mb-3">
+                                        <label for="alamat">Alamat</label>
+                                        <textarea class="form-control" id="alamat" name="alamat"
+                                            placeholder="Masukkan alamat lengkap" rows="3"></textarea>
+                                    </div>
+
+                                    <!-- Status Aktif (Menggunakan Select untuk nilai 1 = Aktif, 0 = Nonaktif) -->
+                                    <div class="form-group mb-3">
+                                        <label for="status_aktif">Status <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="status_aktif" name="status_aktif" required>
+                                            <option value="1" selected>Aktif</option>
+                                            <option value="0">Nonaktif</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Tombol Aksi -->
+                                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                                    <button type="button" class="btn btn-light" onclick="history.back()">Batal</button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- container-scroller ends -->
+        <%- include('../partials/__foot.ejs') %>
+    </body>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Desa Kertasada</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Icon Font Stylesheet -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="../elearning/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="../elearning/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="../elearning/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Template Stylesheet -->
+  <link href="../elearning/css/style.css" rel="stylesheet">
+  <style>
+    body {
+      overflow-x: hidden;
+
+    }
+
+    .dropdown-sid {
+      position: static !important;
+    }
+
+    @media (min-width: 992px) {
+      .dropdown-sid {
+        position: absolute !important;
+        right: 0;
+        left: auto;
+      }
+    }
+
+    .equal-height {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .equal-height .card-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .equal-height img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .equal-height .judul-berita {
+      font-weight: bold;
+      font-size: 1rem;
+      line-height: 1.4;
+      max-height: 3.8em;
+      /* 2 lines */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .equal-height .deskripsi-berita {
+      font-size: 0.875rem;
+      color: #555;
+      max-height: 4.2em;
+      /* 3 lines */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .equal-height .image-wrapper {
+      width: 100%;
+      height: 200px;
+      /* tinggi tetap untuk gambar */
+      overflow: hidden;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .equal-height img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Spinner Start -->
+  <div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <!-- Spinner End -->
+
+
+  <!-- Navbar Start -->
+  <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+    <a href="../" class="navbar-brand d-flex align-items-center px-2 px-lg-4">
+
+      <img class="logo-header me-2" src="/images/logo.jpg" alt="Logo" style="width: 4rem;">
+      <span class="m-0 text-primary fs-4 fw-bold">Desa Kertasada</span>
+    </a>
+
+    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav ms-auto p-4 p-lg-0">
+        <a href="/" class="nav-item nav-link ">Beranda</a>
+        <div class="nav-item dropdown">
+          <a href="#" class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
+          <div class="dropdown-menu fade-down m-0">
+            <a href="/profil/users" class="dropdown-item ">Profil Desa</a>
+            <a href="/pemerintah_desa/users" class="dropdown-item">Pemerintah Desa</a>
+            <a href="/anggota_bpd/users" class="dropdown-item">Data Anggota BPD</a>
+            <a href="" class="dropdown-item">Data Lembaga Desa</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a href="#" class="nav-link active dropdown-toggle" data-bs-toggle="dropdown">Berita</a>
+          <div class="dropdown-menu fade-down m-0">
+            <a href="/agenda/users" class="dropdown-item">Agenda</a>
+            <a href="/berita/users" class="dropdown-item active">Berita Desa</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Produk Hukum</a>
+          <div class="dropdown-menu fade-down m-0">
+            <a href="/produk_hukum/users/peraturan_desa" class="dropdown-item ">Peraturan Desa</a>
+            <a href="/produk_hukum/users/peraturan_kepala_desa" class="dropdown-item">Peraturan Kepala Desa</a>
+            <a href="/produk_hukum/users/keputusan_kepala_desa" class="dropdown-item">Keputusan Kepala Desa</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Layanan</a>
+          <div class="dropdown-menu fade-down m-0 dropdown-sid">
+            <a href="/layanan/users" class="dropdown-item">Pelayanan Mandiri</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a href="#" class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">PPID</a>
+          <div class="dropdown-menu fade-down m-0 dropdown-sid">
+              <a href="/keuangan/users" class="dropdown-item">Info Pengelolaan Keuangan</a>
+              <a href="/ppid/users/" class="dropdown-item">PPID Desa</a>
+              <a href="/ppid/users/seputar_ppid" class="dropdown-item ">Seputar PPID</a>
+          </div>
+      </div>
+
+        <!-- <a href="contact.html" class="nav-item nav-link">Contact</a> -->
+      </div>
+      <!-- <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a> -->
+    </div>
+  </nav>
+  <!-- Navbar End -->
+
+
+  <!-- Header Start -->
+  <div class="container-fluid bg-primary py-5 mb-5 page-header">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+          <h1 class="display-3 text-white animated slideInDown">Berita</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a class="text-white" href="../">Beranda</a></li>
+              <li class="breadcrumb-item text-white active" aria-current="page">Berita</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Header End -->
+
+
+
+
+
+  <!-- News Section Start -->
+  <div class="container-xxl py-5">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Kolom Kiri: Daftar Berita -->
+        <div class="col-lg-9">
+          <div class="row g-4">
+            <% if(data && data.length> 0) { %>
+              <% data.forEach(function(item, index) { %>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="<%= (index % 3) * 0.2 + 0.1 %>s">
+                  <div class="course-item bg-light rounded-3 shadow equal-height">
+                    <div class="position-relative overflow-hidden">
+                      <div class="image-wrapper position-relative overflow-hidden">
+                        <img class="img-fluid rounded-3" src="/images/berita/<%= item.gambar %>"
+                          alt="<%= item.judul %>">
+                        <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                          <a href="/berita/users/detail/<%= item.id_berita %>"
+                            class="flex-shrink-0 btn btn-sm btn-primary" style="border-radius: 30px;">Selengkapnya</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-3 pb-1 card-content">
+                      <small class="mt-2">
+                        <%= item.tanggal_format %>
+                      </small>
+                      <p class="judul-berita fw-bold">
+                        <%= item.judul %>
+                      </p>
+                      <p class="deskripsi-berita mb-4">
+                        <small>
+                          <%= item.deskripsi.length> 100 ? item.deskripsi.substring(0, 100) + '...' : item.deskripsi %>
+                        </small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+                  <% } else { %>
+                    <p class="text-center">Belum ada berita tersedia.</p>
+                    <% } %>
+          </div>
+        </div>
+
+
+        <!-- Kolom Kanan: Recent Posts -->
+        <div class="col-lg-3">
+          <div class="card shadow p-3 recent-posts">
+            <h6 class="title-post text-white rounded bg-primary p-2 mb-3">Recent Posts</h6>
+
+            <% const r=(typeof recentPosts !=='undefined' && recentPosts) ? recentPosts : []; %>
+              <% if (r.length> 0) { %>
+                <% r.forEach(function(post){ %>
+                  <a href="/berita/users/detail/<%= post.id_berita %>" class="text-decoration-none">
+                    <div class="card shadow mb-3">
+                      <img src="/images/berita/<%= post.gambar || 'placeholder.jpg' %>" class="card-img-top"
+                        alt="<%= post.judul %>">
+                      <div class="card-body text-start">
+                        <h6 class="card-title text-dark">
+                          <%= (post.judul || '' ).length> 40 ? post.judul.substring(0,40) + '...' : (post.judul || '')
+                            %>
+                        </h6>
+                      </div>
+                    </div>
+                  </a>
+                  <% }) %>
+                    <% } else { %>
+                      <p class="text-center mb-0">Belum ada postingan terbaru.</p>
+                      <% } %>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- News Section End -->
+
+
+
+
+
+
+  <!-- Footer Start -->
+  <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+      <div class="row g-5">
+        <!-- Kolom 1: Logo dan Tentang Website -->
+        <div class="col-lg-3 col-md-6">
+          <img src="../images/logo.png" alt="Logo Website" class="mb-3 mx-auto d-flex" style="width: 150px;">
+          <p>Sistem Informasi Desa Kertasada adalah portal informasi publik dan layanan online untuk
+            masyarakat Desa Kertasada.</p>
+        </div>
+
+        <!-- Kolom 2: Tautan Utama -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Tautan Utama</h4>
+          <a class="btn btn-link" href="/">Beranda</a>
+          <a class="btn btn-link" href="/profil">Profil</a>
+          <a class="btn btn-link" href="/berita">Berita</a>
+          <a class="btn btn-link" href="/produk-hukum">Produk Hukum</a>
+          <a class="btn btn-link" href="/layanan">Layanan</a>
+          <a class="btn btn-link" href="/sid">SID</a>
+        </div>
+
+        <!-- Kolom 3: Hubungi Kami -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Hubungi Kami</h4>
+          <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+62 852-3311-8970</p>
+          <p class="mb-2"><i class="fa fa-envelope me-3"></i>kertasada@example.com</p>
+          <div class="d-flex pt-2">
+            <a class="btn btn-outline-light btn-social" href="https://wa.me/6287798098663"><i
+                class="fab fa-whatsapp"></i></a>
+            <a class="btn btn-outline-light btn-social"
+              href="https://www.instagram.com/pemdes_kertasada?igsh=ejdxZ3Jiazh5YTNo"><i
+                class="fab fa-instagram"></i></a>
+            <!-- <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-tiktok"></i></a> -->
+            <a class="btn btn-outline-light btn-social"
+              href="https://www.facebook.com/profile.php?id=100094012624083&mibextid=rS40aB7S9Ucbxw6v"><i
+                class="fab fa-facebook"></i></a>
+            <a class="btn btn-outline-light btn-social" href="http://www.youtube.com/@kertasada"><i
+                class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Kolom 4: Alamat -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Alamat</h4>
+          <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Jalan Yos Sudarso No.202 Sumenep
+            Desa Desa Kertasada, Kecamatan Kalianget, Kabupaten Sumenep
+
+            Provinsi Jawa Timur, 69471</p>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        <div class="row">
+          <div class="col-md-12 text-center text-md-center mb-3 mb-md-0">
+            &copy; 2025 Website Resmi <a class="border-bottom" href="#">Desa Kertasada</a>. All Rights
+            Reserved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer End -->
+
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../elearning/lib/wow/wow.min.js"></script>
+  <script src="../elearning/lib/easing/easing.min.js"></script>
+  <script src="../elearning/lib/waypoints/waypoints.min.js"></script>
+  <script src="../elearning/lib/owlcarousel/owl.carousel.min.js"></script>
+
+  <!-- Template Javascript -->
+  <script src="../elearning/js/main.js"></script>
+</body>
+
+</html>

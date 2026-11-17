@@ -1,0 +1,89 @@
+<%- include('../partials/__head.ejs') %>
+
+    <body>
+        <div class="container-scroller d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+
+            <div class="main-panel w-100">
+                <div class="content-wrapper d-flex align-items-center justify-content-center">
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h4 class="card-title">Edit Data petugas</h4>
+                                <p class="card-description">
+                                    Perbarui informasi petugas.
+                                </p>
+
+                                <form action="/petugas/update/<%= id %>" method="POST" class="forms-sample">
+
+                                    <!-- Nama petugas -->
+                                    <div class="form-group mb-3">
+                                        <label for="nama_petugas">
+                                            Nama petugas
+                                        </label>
+
+                                        <input type="text" class="form-control" id="nama_petugas" name="nama_petugas"
+                                            value="<%= data.nama_petugas || '' %>" maxlength="150" required>
+                                    </div>
+                                    <!-- Nama petugas -->
+                                    <div class="form-group mb-3">
+                                        <label for="bagian">
+                                            Bagian
+                                        </label>
+
+                                        <input type="text" class="form-control" id="bagian" name="bagian"
+                                            value="<%= data.bagian || '' %>" maxlength="150" required>
+                                    </div>
+
+
+                                    <!-- Nomor Telepon -->
+                                    <div class="form-group mb-3">
+                                        <label for="no_telepon">
+                                            No. Telepon / WhatsApp
+                                        </label>
+
+                                        <input type="text" class="form-control" id="no_telepon" name="no_telepon"
+                                            value="<%= data.no_telepon || '' %>" maxlength="30">
+                                    </div>
+
+                                    
+
+                                    <!-- Status Aktif -->
+                                    <div class="form-group mb-3">
+                                        <label for="status_aktif">
+                                            Status
+                                        </label>
+
+                                        <select class="form-control" id="status_aktif" name="status_aktif" required>
+                                            <option value="1" <%=String(data.status_aktif)==='1' ? 'selected' : '' %>>
+                                                Aktif
+                                            </option>
+
+                                            <option value="0" <%=String(data.status_aktif)==='0' ? 'selected' : '' %>>
+                                                Nonaktif
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary mr-2">
+                                        Simpan Perubahan
+                                    </button>
+
+                                    <a href="/petugas" class="btn btn-light">
+                                        Batal
+                                    </a>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <%- include('../partials/__foot.ejs') %>
+    </body>
+
+    </html>

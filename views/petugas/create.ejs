@@ -1,0 +1,66 @@
+<%- include('../partials/__head.ejs') %>
+
+    <body>
+        <div class="container-scroller d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+            <!-- partial:partials/_navbar.html -->
+            <!-- partial -->
+            <div class="main-panel w-100">
+                <div class="content-wrapper d-flex align-items-center justify-content-center">
+                    <div class="col-md-9 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Input Data Petugas</h4>
+                                <p class="card-description">
+
+                                </p>
+                                <form action="/petugas/store" method="POST" 
+                                    class="forms-sample">
+
+                                    <!-- Nama petugas -->
+                                    <div class="form-group mb-2">
+                                        <label for="nama_petugas">Nama Petugas <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nama_petugas" name="nama_petugas"
+                                            placeholder="Masukkan nama petugas" required>
+                                    </div>
+
+                                    
+
+                                    <!-- No Telepon (Diubah typenya menjadi text/tel agar sesuai input angka, tag input ditutup dengan benar) -->
+                                    <div class="form-group mb-3">
+                                        <label for="bagian">Bagian</label>
+                                        <input type="text" class="form-control" id="bagian" name="bagian"
+                                            >
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="no_telepon">No. Telepon / WhatsApp</label>
+                                        <input type="text" class="form-control" id="no_telepon" name="no_telepon"
+                                            placeholder="Contoh: 081234567890">
+                                    </div>
+
+                                    
+
+                                    <!-- Status Aktif (Menggunakan Select untuk nilai 1 = Aktif, 0 = Nonaktif) -->
+                                    <div class="form-group mb-3">
+                                        <label for="status_aktif">Status <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="status_aktif" name="status_aktif" required>
+                                            <option value="1" selected>Aktif</option>
+                                            <option value="0">Nonaktif</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Tombol Aksi -->
+                                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                                    <button type="button" class="btn btn-light" onclick="history.back()">Batal</button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- container-scroller ends -->
+        <%- include('../partials/__foot.ejs') %>
+    </body>
