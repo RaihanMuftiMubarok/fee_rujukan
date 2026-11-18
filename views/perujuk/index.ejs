@@ -17,13 +17,13 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">Data Perujuk</h4>
                                                     <div class="d-flex flex-wrap gap-2 mb-3">
-                                                        <a href="/perujuk/create" class="btn btn-sm btn-success">
+                                                        <a href="/perujuk/create" class="btn btn-sm btn-info">
                                                             <i class="bi bi-plus-circle"></i>
                                                             Tambah Perujuk
                                                         </a>
 
                                                         <a href="/perujuk/import"
-                                                            class="btn btn-sm btn-outline-primary">
+                                                            class="btn btn-sm btn-outline-success ">
                                                             <i class="bi bi-file-earmark-excel"></i>
                                                             Impor Excel
                                                         </a>
@@ -68,13 +68,13 @@
                                                                         </td>
                                                                         <td>
                                                                             <a href="/perujuk/edit/<%= data[i].id_perujuk %>"
-                                                                                class="btn btn-sm btn-warning">Edit</a>
+                                                                                class="btn btn-sm btn-warning"><i class="ti ti-edit"></i></a>
                                                                             <!-- Tombol untuk trigger modal -->
                                                                             <button type="button"
                                                                                 class="btn btn-sm btn-danger"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#deleteModal<%= data[i].id_perujuk %>">
-                                                                                Delete
+                                                                                <i class="ti ti-trash"></i>
                                                                             </button>
                                                                         </td>
                                                                         <!-- Modal Konfirmasi -->

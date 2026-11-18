@@ -303,7 +303,7 @@ router.post('/store', async (req, res) => {
         // ----------------------------------------------
 
         const perujuk = await getActiveRow(
-            `SELECT id_perujuk, nama_perujuk, nama_asli_excel
+            `SELECT id_perujuk, nama_perujuk, nama_perujuk_excel
              FROM master_perujuk
              WHERE id_perujuk = ?
              AND status_aktif = 1`,
@@ -399,7 +399,7 @@ router.post('/store', async (req, res) => {
 
             id_perujuk,
             nama_perujuk_excel:
-                perujuk.nama_asli_excel || perujuk.nama_perujuk,
+                 perujuk.nama_perujuk,
 
             id_ruang,
             ruang_excel: ruang ? ruang.nama_ruang : null,
