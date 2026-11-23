@@ -392,42 +392,23 @@ router.post('/store', async (req, res) => {
         // ----------------------------------------------
 
         const Data = {
-
             nama_pasien,
             no_rm: no_rm || null,
             status_pasien: status_pasien || null,
 
             id_perujuk,
-            nama_perujuk_excel:
-                 perujuk.nama_perujuk,
-
             id_ruang,
-            ruang_excel: ruang ? ruang.nama_ruang : null,
-
             tanggal_mrs: tanggal_mrs || null,
-
             id_dx,
-            dx_excel: dx
-                ? `${dx.kode_dx} - ${dx.nama_kategori}`
-                : null,
 
             nominal_fee,
 
             id_petugas_penerima,
-            nama_petugas_penerima_excel:
-                petugasPenerima
-                    ? petugasPenerima.nama_petugas
-                    : null,
 
             status_pembayaran,
 
             id_periode,
             id_petugas_pencair,
-
-            nama_petugas_pencair_excel:
-                petugasPencair
-                    ? petugasPencair.nama_petugas
-                    : null,
 
             keterangan: keterangan || null
         };

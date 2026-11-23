@@ -164,20 +164,17 @@ class Model_Transaksi {
             SELECT
                 t.*,
 
-                COALESCE(p.nama_perujuk, t.nama_perujuk_excel)
-                    AS nama_perujuk,
+                p.nama_perujuk,
 
-                COALESCE(r.nama_ruang, t.ruang_excel)
-                    AS nama_ruang,
+                r.nama_ruang,
 
-                COALESCE(d.nama_kategori, t.dx_excel)
-                    AS nama_dx,
+                d.kode_dx,
+                d.nama_kategori AS nama_kategori_dx,
+                CONCAT_WS(' - ', d.kode_dx, d.nama_kategori) AS nama_dx,
 
-                COALESCE(tp.nama_petugas, t.nama_petugas_penerima_excel)
-                    AS nama_petugas_penerima_master,
+                tp.nama_petugas AS nama_petugas_penerima_master,
 
-                COALESCE(tc.nama_petugas, t.nama_petugas_pencair_excel)
-                    AS nama_petugas_pencair_master,
+                tc.nama_petugas AS nama_petugas_pencair_master,
 
                 pr.tahun,
                 pr.bulan,
@@ -421,49 +418,46 @@ class Model_Transaksi {
     static async getPaginated(limit, offset) {
 
         const sql = `
-            SELECT
-                t.*,
+                SELECT
+                    t.*,
 
-                COALESCE(p.nama_perujuk, t.nama_perujuk_excel)
-                    AS nama_perujuk,
+                    p.nama_perujuk,
 
-                COALESCE(r.nama_ruang, t.ruang_excel)
-                    AS nama_ruang,
+                    r.nama_ruang,
 
-                COALESCE(d.nama_kategori, t.dx_excel)
-                    AS nama_dx,
+                    d.kode_dx,
+                    d.nama_kategori AS nama_kategori_dx,
+                    CONCAT_WS(' - ', d.kode_dx, d.nama_kategori) AS nama_dx,
 
-                COALESCE(tp.nama_petugas, t.nama_petugas_penerima_excel)
-                    AS nama_petugas_penerima_master,
+                    tp.nama_petugas AS nama_petugas_penerima_master,
 
-                COALESCE(tc.nama_petugas, t.nama_petugas_pencair_excel)
-                    AS nama_petugas_pencair_master,
+                    tc.nama_petugas AS nama_petugas_pencair_master,
 
-                pr.tahun,
-                pr.bulan,
-                pr.nomor_periode
+                    pr.tahun,
+                    pr.bulan,
+                    pr.nomor_periode
 
-            FROM transaksi_fee_rujukan t
+                FROM transaksi_fee_rujukan t
 
-            LEFT JOIN master_perujuk p
-                ON t.id_perujuk = p.id_perujuk
+                LEFT JOIN master_perujuk p
+                    ON t.id_perujuk = p.id_perujuk
 
-            LEFT JOIN master_ruang r
-                ON t.id_ruang = r.id_ruang
+                LEFT JOIN master_ruang r
+                    ON t.id_ruang = r.id_ruang
 
-            LEFT JOIN master_dx d
-                ON t.id_dx = d.id_dx
+                LEFT JOIN master_dx d
+                    ON t.id_dx = d.id_dx
 
-            LEFT JOIN master_petugas tp
-                ON t.id_petugas_penerima = tp.id_petugas
+                LEFT JOIN master_petugas tp
+                    ON t.id_petugas_penerima = tp.id_petugas
 
-            LEFT JOIN master_petugas tc
-                ON t.id_petugas_pencair = tc.id_petugas
+                LEFT JOIN master_petugas tc
+                    ON t.id_petugas_pencair = tc.id_petugas
 
-            LEFT JOIN periode_fee_rujukan pr
-                ON t.id_periode = pr.id_periode
+                LEFT JOIN periode_fee_rujukan pr
+                    ON t.id_periode = pr.id_periode
 
-            ORDER BY t.tanggal_mrs DESC, t.id_fee DESC
+                ORDER BY t.tanggal_mrs DESC, t.id_fee DESC
 
             LIMIT ? OFFSET ?
         `;
