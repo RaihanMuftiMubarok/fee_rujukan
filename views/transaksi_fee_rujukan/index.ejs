@@ -1,25 +1,302 @@
+
 <%- include('../partials/__head.ejs') %>
+
+<%
+    const namaBulan = [
+        '',
+        'Januari', 'Februari', 'Maret', 'April',
+        'Mei', 'Juni', 'Juli', 'Agustus',
+        'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    function formatTanggal(value) {
+        if (!value) return '-';
+
+        let tanggal;
+
+        if (value instanceof Date && !isNaN(value.getTime())) {
+            const tahun = value.getFullYear();
+            const bulan = String(value.getMonth() + 1).padStart(2, '0');
+            const hari = String(value.getDate()).padStart(2, '0');
+
+            tanggal = `${tahun}-${bulan}-${hari}`;
+        } else {
+            tanggal = String(value).substring(0, 10);
+        }
+
+        const bagian = tanggal.split('-');
+
+        if (bagian.length !== 3) return tanggal;
+
+        return `${bagian[2]}/${bagian[1]}/${bagian[0]}`;
+    }
+
+    const startRecord = totalData === 0
+        ? 0
+        : ((currentPage - 1) * limit) + 1;
+
+    const endRecord = Math.min(
+        currentPage * limit,
+        totalData
+    );
+
+    const firstPage = Math.max(1, currentPage - 2);
+    const lastPage = Math.min(totalPages, currentPage + 2);
+
+    function paginationUrl(page) {
+        return `?${filterQuery ? filterQuery + '&' : ''}page=${page}`;
+    }
+%>
+
 <body>
 <div class="container-scroller">
+
     <%- include('../partials/__nav.ejs') %>
+
     <section class="pc-container">
         <div class="pc-content">
+
             <div class="main-panel w-100">
                 <div class="content-wrapper">
+
                     <div class="container-fluid mt-3">
                         <div class="row">
+
                             <div class="col-lg-12 grid-margin stretch-card">
+
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="card-title">Daftar Transaksi Fee Rujukan Pasien</h4>
-                                        <p class="card-description">Kelola data rujukan masuk (Offsite) dan riwayat pencairan (Onsite).</p>
-                                        
-                                        <a href="/transaksi_fee_rujukan/create" class="btn btn-sm btn-info mb-3">
-                                            <i class="ti-plus"></i> Input Transaksi Baru
+
+                                        <h4 class="card-title">
+                                            Daftar Transaksi Fee Rujukan Pasien
+                                        </h4>
+
+                                        <p class="card-description">
+                                            Kelola data rujukan masuk (OFFSITE)
+                                            dan riwayat pencairan (ONSITE).
+                                        </p>
+
+                                        <!-- FLASH MESSAGE -->
+                                        <% if (typeof success !== 'undefined' && success.length > 0) { %>
+                                            <% success.forEach(msg => { %>
+                                                <div class="alert alert-success alert-dismissible fade show">
+                                                    <%= msg %>
+                                                    <button type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="alert">
+                                                    </button>
+                                                </div>
+                                            <% }) %>
+                                        <% } %>
+
+                                        <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                                            <% error.forEach(msg => { %>
+                                                <div class="alert alert-danger alert-dismissible fade show">
+                                                    <%= msg %>
+                                                    <button type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="alert">
+                                                    </button>
+                                                </div>
+                                            <% }) %>
+                                        <% } %>
+
+
+                                        <!-- TOMBOL TAMBAH -->
+                                        <a href="/transaksi_fee_rujukan/create"
+                                           class="btn btn-sm btn-info mb-3">
+
+                                            <i class="ti-plus"></i>
+                                            Input Transaksi Baru
+
                                         </a>
 
+
+                                        <!-- ================================= -->
+                                        <!-- FILTER TRANSAKSI -->
+                                        <!-- ================================= -->
+
+                                        <div class="card border mb-4">
+
+                                            <div class="card-body">
+
+                                                <h5 class="mb-3">
+                                                    <i class="ti-filter"></i>
+                                                    Filter Transaksi
+                                                </h5>
+
+                                                <form
+                                                    action="/transaksi_fee_rujukan"
+                                                    method="GET">
+
+                                                    <div class="row">
+
+                                                        <!-- Filter Status -->
+                                                        <div class="col-md-3 mb-3">
+
+                                                            <label for="filter_status">
+                                                                Status Pembayaran
+                                                            </label>
+
+                                                            <select
+                                                                class="form-control"
+                                                                id="filter_status"
+                                                                name="status_pembayaran">
+
+                                                                <option value=""
+                                                                    <%= !filters.status_pembayaran ? 'selected' : '' %>>
+                                                                    Semua Status
+                                                                </option>
+
+                                                                <option value="OFFSITE"
+                                                                    <%= filters.status_pembayaran === 'OFFSITE' ? 'selected' : '' %>>
+                                                                    OFFSITE (Belum Cair)
+                                                                </option>
+
+                                                                <option value="ONSITE"
+                                                                    <%= filters.status_pembayaran === 'ONSITE' ? 'selected' : '' %>>
+                                                                    ONSITE (Sudah Cair)
+                                                                </option>
+
+                                                            </select>
+
+                                                        </div>
+
+
+                                                        <!-- Filter Bulan -->
+                                                        <div class="col-md-3 mb-3">
+
+                                                            <label for="filter_bulan">
+                                                                Bulan MRS
+                                                            </label>
+
+                                                            <select
+                                                                class="form-control"
+                                                                id="filter_bulan"
+                                                                name="bulan">
+
+                                                                <option value="">
+                                                                    Semua Bulan
+                                                                </option>
+
+                                                                <% for (let i = 1; i <= 12; i++) { %>
+
+                                                                    <option
+                                                                        value="<%= i %>"
+                                                                        <%= filters.bulan === String(i) ? 'selected' : '' %>>
+
+                                                                        <%= namaBulan[i] %>
+
+                                                                    </option>
+
+                                                                <% } %>
+
+                                                            </select>
+
+                                                        </div>
+
+
+                                                        <!-- Filter Tahun -->
+                                                        <div class="col-md-3 mb-3">
+
+                                                            <label for="filter_tahun">
+                                                                Tahun MRS
+                                                            </label>
+
+                                                            <select
+                                                                class="form-control"
+                                                                id="filter_tahun"
+                                                                name="tahun">
+
+                                                                <option value="">
+                                                                    Semua Tahun
+                                                                </option>
+
+                                                                <% tahunList.forEach(t => { %>
+
+                                                                    <option
+                                                                        value="<%= t.tahun %>"
+                                                                        <%= filters.tahun === String(t.tahun) ? 'selected' : '' %>>
+
+                                                                        <%= t.tahun %>
+
+                                                                    </option>
+
+                                                                <% }) %>
+
+                                                            </select>
+
+                                                        </div>
+
+
+                                                        <!-- Tombol -->
+                                                        <div class="col-md-3 mb-3 d-flex align-items-end">
+
+                                                            <button
+                                                                type="submit"
+                                                                class="btn btn-primary mr-2">
+
+                                                                <i class="ti-search"></i>
+                                                                Filter
+
+                                                            </button>
+
+                                                            <a
+                                                                href="/transaksi_fee_rujukan"
+                                                                class="btn btn-light">
+
+                                                                Reset
+
+                                                            </a>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+                                        </div>
+
+
+                                        <!-- ================================= -->
+                                        <!-- INFORMASI JUMLAH DATA -->
+                                        <!-- ================================= -->
+
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+
+                                            <div class="text-muted mb-2">
+
+                                                Menampilkan
+                                                <strong><%= startRecord %></strong>
+                                                -
+                                                <strong><%= endRecord %></strong>
+                                                dari
+                                                <strong><%= totalData %></strong>
+                                                transaksi
+
+                                            </div>
+
+                                            <div class="text-muted mb-2">
+
+                                                Halaman
+                                                <strong><%= currentPage %></strong>
+                                                dari
+                                                <strong><%= totalPages %></strong>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- ================================= -->
+                                        <!-- TABEL TRANSAKSI -->
+                                        <!-- ================================= -->
+
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-hover table-bordered">
+
+                                            <table class="table  table-hover table-bordered">
+
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -28,130 +305,507 @@
                                                         <th>Nama Perujuk</th>
                                                         <th>Ruang / DX</th>
                                                         <th>Fee (Rp)</th>
-                                                        <th>Status</th>
+                                                        <th>Status Pasien</th>
                                                         <th>Penerima</th>
                                                         <th>Pencair</th>
-                                                        <th>Status Pencairan</th>
+                                                        <th>Status Pembayaran</th>
                                                         <th>Periode</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
+
                                                 <tbody>
+
                                                     <% if (data.length > 0) { %>
+
                                                         <% data.forEach((item, index) => { %>
+
                                                             <tr>
-                                                                <td><%= index + 1 %></td>
-                                                                <td><%= item.tanggal_mrs ? new Date(item.tanggal_mrs).toLocaleDateString('id-ID') : '-' %></td>
+
+                                                                <!-- Nomor -->
                                                                 <td>
-                                                                    <strong><%= item.nama_pasien %></strong><br>
-                                                                    <small class="text-muted">RM: <%= item.no_rm || '-' %> </small>
+                                                                    <%= startRecord + index %>
                                                                 </td>
-                                                                <td><%= item.nama_perujuk || item.nama_perujuk_excel || '-' %></td>
+
+                                                                <!-- Tanggal MRS -->
                                                                 <td>
-                                                                    <%= item.nama_ruang || '-' %><br>
-                                                                    <small class="text-muted">DX: <%= item.nama_dx || '-' %></small>
+                                                                    <%= formatTanggal(item.tanggal_mrs) %>
                                                                 </td>
-                                                                <td><strong>Rp <%= Number(item.nominal_fee || 0).toLocaleString('id-ID') %></strong></td>
-                                                                <td><%= item.status_pasien || item.status_pasien || '-' %></td>
-                                                                <td><%= item.nama_petugas_penerima_master || '-' %></td>
-                                                                <td><%= item.nama_petugas_pencair_master || '-' %></td>
+
+                                                                <!-- Data Pasien -->
                                                                 <td>
+                                                                    <strong>
+                                                                        <%= item.nama_pasien %>
+                                                                    </strong>
+
+                                                                    <br>
+
+                                                                    <small class="text-muted">
+                                                                        RM: <%= item.no_rm || '-' %>
+                                                                    </small>
+                                                                </td>
+
+                                                                <!-- Perujuk -->
+                                                                <td>
+                                                                    <%= item.nama_perujuk || '-' %>
+                                                                </td>
+
+                                                                <!-- Ruang dan Diagnosis -->
+                                                                <td>
+                                                                    <%= item.nama_ruang || '-' %>
+
+                                                                    <br>
+
+                                                                    <small class="text-muted">
+                                                                        DX: <%= item.nama_dx || '-' %>
+                                                                    </small>
+                                                                </td>
+
+                                                                <!-- Nominal Fee -->
+                                                                <td>
+                                                                    <strong>
+                                                                        Rp <%= Number(item.nominal_fee || 0).toLocaleString('id-ID') %>
+                                                                    </strong>
+                                                                </td>
+
+                                                                <!-- Status Pasien -->
+                                                                <td>
+                                                                    <%= item.status_pasien || '-' %>
+                                                                </td>
+
+                                                                <!-- Petugas Penerima -->
+                                                                <td>
+                                                                    <%= item.nama_petugas_penerima_master || '-' %>
+                                                                </td>
+
+                                                                <!-- Petugas Pencair -->
+                                                                <td>
+                                                                    <%= item.nama_petugas_pencair_master || '-' %>
+                                                                </td>
+
+                                                                <!-- Status Pembayaran -->
+                                                                <td>
+
                                                                     <% if (item.status_pembayaran === 'OFFSITE') { %>
-                                                                        <span class="badge badge-warning text-dark">OFFSITE (Belum Cair)</span>
+
+                                                                        <span class="badge bg-warning text-dark">
+                                                                            OFFSITE (Belum Cair)
+                                                                        </span>
+
+                                                                    <% } else if (item.status_pembayaran === 'ONSITE') { %>
+
+                                                                        <span class="badge bg-success">
+                                                                            ONSITE (Sudah Cair)
+                                                                        </span>
+
                                                                     <% } else { %>
-                                                                        <span class="badge badge-info">ONSITE (Sudah Cair)</span>
+
+                                                                        <span class="badge badge-secondary">
+                                                                            Tidak Diketahui
+                                                                        </span>
+
                                                                     <% } %>
+
                                                                 </td>
+
+                                                                <!-- Periode -->
                                                                 <td>
-                                                                    <% if (item.status_pembayaran === 'ONSITE') { %>
-                                                                        Periode <%= item.nomor_periode %> (<%= item.bulan %>/<%= item.tahun %>)<br>
-                                                                        
+
+                                                                    <% if (
+                                                                        item.status_pembayaran === 'ONSITE' &&
+                                                                        item.nomor_periode
+                                                                    ) { %>
+
+                                                                        Periode <%= item.nomor_periode %>
+
+                                                                        <br>
+
+                                                                        <small class="text-muted">
+                                                                            <%= namaBulan[Number(item.bulan)] || item.bulan %>
+                                                                            <%= item.tahun %>
+                                                                        </small>
+
                                                                     <% } else { %>
+
                                                                         <span class="text-muted">-</span>
+
                                                                     <% } %>
+
                                                                 </td>
+
+
+                                                                <!-- Aksi -->
                                                                 <td>
+
                                                                     <div class="d-flex align-items-center">
-                                                                        <!-- Jika OFFSITE, tampilkan tombol Cairkan -->
+
                                                                         <% if (item.status_pembayaran === 'OFFSITE') { %>
-                                                                            <button type="button" class="btn btn-sm btn-outline-info mr-2 mb-1" data-bs-toggle="modal" data-bs-target="#cairkanModal<%= item.id_fee %>">
+
+                                                                            <!-- Tombol Cairkan -->
+                                                                            <button
+                                                                                type="button"
+                                                                                class="btn btn-sm btn-outline-info mr-2 mb-1"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#cairkanModal<%= item.id_fee %>">
+
                                                                                 Cairkan
+
                                                                             </button>
+
+                                                                            <!-- Tombol Hapus -->
+                                                                            <form
+                                                                                action="/transaksi_fee_rujukan/delete/<%= item.id_fee %>"
+                                                                                method="POST"
+                                                                                onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')">
+
+                                                                                <button
+                                                                                    type="submit"
+                                                                                    class="btn btn-sm btn-danger mb-1">
+
+                                                                                    <i class="ti ti-trash"></i>
+
+                                                                                </button>
+
+                                                                            </form>
+
+                                                                        <% } else if (item.status_pembayaran === 'ONSITE') { %>
+
+                                                                            <span class="text-muted">
+                                                                                Sudah dicairkan
+                                                                            </span>
+
                                                                         <% } %>
 
-                                                                        <!-- Tombol Hapus -->
-                                                                        <form action="/transaksi_fee_rujukan/delete/<%= item.id_fee %>" method="POST" onsubmit="return confirm('Yakin ingin menghapus data transaksi pasien ini?')">
-                                                                            <button type="submit" class="btn btn-sm btn-danger mb-1"><i class="ti ti-trash"></i></button>
-                                                                        </form>
                                                                     </div>
+
                                                                 </td>
+
                                                             </tr>
+
                                                         <% }) %>
+
                                                     <% } else { %>
+
                                                         <tr>
-                                                            <td colspan="9" class="text-center">Belum ada data transaksi fee rujukan.</td>
+                                                            <td colspan="12" class="text-center">
+                                                                Tidak ada transaksi yang sesuai dengan filter.
+                                                            </td>
                                                         </tr>
+
                                                     <% } %>
+
                                                 </tbody>
+
                                             </table>
+
                                         </div>
+
+
+                                        <!-- ================================= -->
+                                        <!-- PAGINATION -->
+                                        <!-- ================================= -->
+
+                                        <% if (totalPages > 1) { %>
+
+                                            <nav aria-label="Navigasi halaman transaksi"
+                                                 class="mt-4">
+
+                                                <ul class="pagination justify-content-center">
+
+                                                    <!-- Sebelumnya -->
+                                                    <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+
+                                                        <a
+                                                            class="page-link"
+                                                            href="<%= currentPage > 1 ? paginationUrl(currentPage - 1) : '#' %>">
+
+                                                            Sebelumnya
+
+                                                        </a>
+
+                                                    </li>
+
+
+                                                    <!-- Halaman pertama jika jarak jauh -->
+                                                    <% if (firstPage > 1) { %>
+
+                                                        <li class="page-item">
+                                                            <a class="page-link"
+                                                               href="<%= paginationUrl(1) %>">
+                                                                1
+                                                            </a>
+                                                        </li>
+
+                                                        <% if (firstPage > 2) { %>
+                                                            <li class="page-item disabled">
+                                                                <span class="page-link">...</span>
+                                                            </li>
+                                                        <% } %>
+
+                                                    <% } %>
+
+
+                                                    <!-- Nomor halaman -->
+                                                    <% for (let p = firstPage; p <= lastPage; p++) { %>
+
+                                                        <li class="page-item <%= currentPage === p ? 'active' : '' %>">
+
+                                                            <a
+                                                                class="page-link"
+                                                                href="<%= paginationUrl(p) %>">
+
+                                                                <%= p %>
+
+                                                            </a>
+
+                                                        </li>
+
+                                                    <% } %>
+
+
+                                                    <!-- Halaman terakhir jika jarak jauh -->
+                                                    <% if (lastPage < totalPages) { %>
+
+                                                        <% if (lastPage < totalPages - 1) { %>
+                                                            <li class="page-item disabled">
+                                                                <span class="page-link">...</span>
+                                                            </li>
+                                                        <% } %>
+
+                                                        <li class="page-item">
+                                                            <a
+                                                                class="page-link"
+                                                                href="<%= paginationUrl(totalPages) %>">
+
+                                                                <%= totalPages %>
+
+                                                            </a>
+                                                        </li>
+
+                                                    <% } %>
+
+
+                                                    <!-- Berikutnya -->
+                                                    <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+
+                                                        <a
+                                                            class="page-link"
+                                                            href="<%= currentPage < totalPages ? paginationUrl(currentPage + 1) : '#' %>">
+
+                                                            Berikutnya
+
+                                                        </a>
+
+                                                    </li>
+
+                                                </ul>
+
+                                            </nav>
+
+                                        <% } %>
 
                                     </div>
                                 </div>
+
                             </div>
+
                         </div>
                     </div>
+
                 </div>
             </div>
+
         </div>
     </section>
+
 </div>
 
-<!-- Modal Dialog Pencairan Cepat untuk Data Offsite -->
+
+<!-- ============================================== -->
+<!-- MODAL PENCAIRAN -->
+<!-- ============================================== -->
+
 <% data.forEach(item => { %>
+
     <% if (item.status_pembayaran === 'OFFSITE') { %>
-        <div class="modal fade" id="cairkanModal<%= item.id_fee %>" tabindex="-1" aria-labelledby="cairkanModalLabel<%= item.id_fee %>" aria-hidden="true">
+
+        <div class="modal fade"
+             id="cairkanModal<%= item.id_fee %>"
+             tabindex="-1"
+             aria-labelledby="cairkanModalLabel<%= item.id_fee %>"
+             aria-hidden="true">
+
             <div class="modal-dialog">
+
                 <div class="modal-content">
-                    <form action="/transaksi/cairkan/<%= item.id_fee %>" method="POST">
+
+                    <form
+                        action="/transaksi_fee_rujukan/cairkan/<%= item.id_fee %>"
+                        method="POST">
+
                         <div class="modal-header">
-                            <h5 class="modal-title" id="cairkanModalLabel<%= item.id_fee %>">Proses Pencairan Fee Rujukan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                            <h5 class="modal-title"
+                                id="cairkanModalLabel<%= item.id_fee %>">
+
+                                Proses Pencairan Fee Rujukan
+
+                            </h5>
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                            </button>
+
                         </div>
+
+
                         <div class="modal-body">
-                            <p>Cairkan fee untuk pasien: <strong><%= item.nama_pasien %></strong> (Nominal: <strong>Rp <%= Number(item.nominal_fee || 0).toLocaleString('id-ID') %></strong>)</p>
-                            
+
+                            <p>
+                                Cairkan fee untuk pasien:
+
+                                <strong>
+                                    <%= item.nama_pasien %>
+                                </strong>
+
+                                <br>
+
+                                Nominal:
+
+                                <strong>
+                                    Rp <%= Number(item.nominal_fee || 0).toLocaleString('id-ID') %>
+                                </strong>
+                            </p>
+
+
+                            <!-- Pilih Periode -->
                             <div class="form-group mb-3">
-                                <label for="id_periode">Pilih Periode Pencairan <span class="text-danger">*</span></label>
-                                <select class="form-control" name="id_periode" required>
-                                    <option value="" disabled selected>-- Pilih Periode --</option>
+
+                                <label for="id_periode_<%= item.id_fee %>">
+                                    Pilih Periode Pencairan
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <select
+                                    class="form-control"
+                                    id="id_periode_<%= item.id_fee %>"
+                                    name="id_periode"
+                                    required>
+
+                                    <option value="" selected disabled>
+                                        -- Pilih Periode --
+                                    </option>
+
                                     <% listPeriode.forEach(pr => { %>
-                                        <option value="<%= pr.id_periode %>">Tahun <%= pr.tahun %> - Bulan <%= pr.bulan %> (Periode <%= pr.nomor_periode %>)</option>
+
+                                        <option value="<%= pr.id_periode %>">
+
+                                            Tahun <%= pr.tahun %> -
+
+                                            <%= namaBulan[Number(pr.bulan)] || pr.bulan %>
+
+                                            (Periode <%= pr.nomor_periode %>)
+
+                                        </option>
+
                                     <% }) %>
+
                                 </select>
+
                             </div>
 
+
+                            <!-- Petugas Pencair -->
                             <div class="form-group mb-3">
-                                <label for="id_petugas_pencair">Petugas yang Mencairkan <span class="text-danger">*</span></label>
-                                <select class="form-control" name="id_petugas_pencair" required>
-                                    <option value="" disabled selected>-- Pilih Petugas Pencair --</option>
+
+                                <label for="id_petugas_pencair_<%= item.id_fee %>">
+                                    Petugas yang Mencairkan
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <select
+                                    class="form-control"
+                                    id="id_petugas_pencair_<%= item.id_fee %>"
+                                    name="id_petugas_pencair"
+                                    required>
+
+                                    <option value="" selected disabled>
+                                        -- Pilih Petugas Pencair --
+                                    </option>
+
                                     <% listPetugas.forEach(pt => { %>
-                                        <option value="<%= pt.id_petugas %>"><%= pt.nama_petugas %></option>
+
+                                        <option value="<%= pt.id_petugas %>">
+                                            <%= pt.nama_petugas %>
+                                        </option>
+
                                     <% }) %>
+
                                 </select>
+
                             </div>
+
+
+                            <!-- Peringatan -->
+                            <% if (listPeriode.length === 0) { %>
+
+                                <div class="alert alert-warning">
+                                    Belum tersedia periode anggaran.
+                                    Silakan buat periode terlebih dahulu.
+                                </div>
+
+                            <% } %>
+
+                            <% if (listPetugas.length === 0) { %>
+
+                                <div class="alert alert-warning">
+                                    Belum tersedia petugas aktif untuk pencairan.
+                                </div>
+
+                            <% } %>
+
                         </div>
+
+
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-info">Proses Cairkan Sekarang</button>
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                                Batal
+
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-success"
+                                <%= (listPeriode.length === 0 || listPetugas.length === 0) ? 'disabled' : '' %>>
+
+                                Proses Cairkan Sekarang
+
+                            </button>
+
                         </div>
+
                     </form>
+
                 </div>
+
             </div>
+
         </div>
+
     <% } %>
+
 <% }) %>
 
+
 <%- include('../partials/__foot.ejs') %>
+
 </body>
 </html>

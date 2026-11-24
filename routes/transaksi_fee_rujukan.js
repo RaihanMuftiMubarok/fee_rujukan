@@ -103,7 +103,81 @@ function getPublicError(error, defaultMessage) {
 router.get('/', async (req, res, next) => {
     try {
 
-        const transaksi = await Model_Transaksi.getAll();
+        // ==========================================
+        // 1. Validasi filter dari URL
+        // ==========================================
+
+        let status_pembayaran = String(
+            req.query.status_pembayaran ?? ''
+        );
+
+        if (!['OFFSITE', 'ONSITE'].includes(status_pembayaran)) {
+            status_pembayaran = '';
+        }
+
+        let tahun = String(req.query.tahun ?? '');
+
+        if (!/^\d{4}$/.test(tahun) ||
+            Number(tahun) < 2000 ||
+            Number(tahun) > 2100) {
+            tahun = '';
+        }
+
+        let bulan = String(req.query.bulan ?? '');
+
+        if (
+            bulan !== '' &&
+            (!/^\d{1,2}$/.test(bulan) ||
+             Number(bulan) < 1 ||
+             Number(bulan) > 12)
+        ) {
+            bulan = '';
+        }
+
+        const filters = {
+            status_pembayaran,
+            tahun,
+            bulan
+        };
+
+
+        // ==========================================
+        // 2. Pagination
+        // ==========================================
+
+        const limit = 10;
+
+        let currentPage = Number.parseInt(req.query.page, 10);
+
+        if (!Number.isInteger(currentPage) || currentPage < 1) {
+            currentPage = 1;
+        }
+
+        // Hitung total data sesuai filter
+        const totalData =
+            await Model_Transaksi.getCountFiltered(filters);
+
+        const totalPages = Math.max(
+            1,
+            Math.ceil(totalData / limit)
+        );
+
+        // Jika nomor halaman melebihi total halaman
+        currentPage = Math.min(currentPage, totalPages);
+
+        const offset = (currentPage - 1) * limit;
+
+        // Ambil data sesuai filter dan halaman
+        const transaksi = await Model_Transaksi.getFiltered(
+            filters,
+            limit,
+            offset
+        );
+
+
+        // ==========================================
+        // 3. Data pilihan dropdown
+        // ==========================================
 
         const periode = await queryAsync(
             `SELECT *
@@ -118,17 +192,64 @@ router.get('/', async (req, res, next) => {
              ORDER BY nama_petugas ASC`
         );
 
+        const tahunList =
+            await Model_Transaksi.getAvailableYears();
+
+
+        // ==========================================
+        // 4. Query string untuk pagination
+        //    agar filter tidak hilang
+        // ==========================================
+
+        const queryParams = new URLSearchParams();
+
+        if (filters.status_pembayaran) {
+            queryParams.set(
+                'status_pembayaran',
+                filters.status_pembayaran
+            );
+        }
+
+        if (filters.bulan) {
+            queryParams.set('bulan', filters.bulan);
+        }
+
+        if (filters.tahun) {
+            queryParams.set('tahun', filters.tahun);
+        }
+
+        const filterQuery = queryParams.toString();
+
+
+        // ==========================================
+        // 5. Kirim ke view
+        // ==========================================
+
         res.render('transaksi_fee_rujukan/index', {
+
             data: transaksi,
+
             listPeriode: periode,
             listPetugas: petugas,
+            tahunList,
+
+            filters,
+            filterQuery,
+
+            currentPage,
+            totalPages,
+            totalData,
+            limit,
 
             success: req.flash('success'),
             error: req.flash('error')
+
         });
 
     } catch (error) {
+
         console.error('Error halaman index transaksi:', error);
+
         next(error);
     }
 });

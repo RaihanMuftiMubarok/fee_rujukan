@@ -27,7 +27,29 @@
 
 
   </script>
+   <script>
+       document.addEventListener('DOMContentLoaded', function () {
+   
+           if (!window.jQuery || !jQuery.fn.select2) {
+               console.error(
+                   'Select2 tidak tersedia. Periksa apakah jQuery sudah dimuat.'
+               );
+               return;
+           }
+   
+           jQuery('.searchable-select').select2({
+               width: '100%',
+               placeholder: 'Ketik untuk mencari...',
+               allowClear: false,
+               minimumResultsForSearch: 0
+           });
+   
+       });
+   </script>
+   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <!-- [Page Specific JS] end -->
+   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
 </body>
 
 </html>

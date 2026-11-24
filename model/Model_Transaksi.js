@@ -14,6 +14,73 @@ function queryAsync(conn, sql, params = []) {
     });
 }
 
+function buildFilterWhere(filters = {}) {
+    const conditions = [];
+    const params = [];
+
+    // Filter OFFSITE / ONSITE
+    if (filters.status_pembayaran) {
+        conditions.push('t.status_pembayaran = ?');
+        params.push(filters.status_pembayaran);
+    }
+
+    const tahun = filters.tahun
+        ? Number(filters.tahun)
+        : null;
+
+    const bulan = filters.bulan
+        ? Number(filters.bulan)
+        : null;
+
+    // Filter tahun dan bulan sekaligus
+    if (tahun && bulan) {
+        const tanggalAwal =
+            `${tahun}-${String(bulan).padStart(2, '0')}-01`;
+
+        const tanggalAkhirDate = new Date(
+            Date.UTC(tahun, bulan, 1)
+        );
+
+        const tanggalAkhir = [
+            tanggalAkhirDate.getUTCFullYear(),
+            String(tanggalAkhirDate.getUTCMonth() + 1).padStart(2, '0'),
+            '01'
+        ].join('-');
+
+        conditions.push(
+            't.tanggal_mrs >= ? AND t.tanggal_mrs < ?'
+        );
+
+        params.push(tanggalAwal, tanggalAkhir);
+
+    } else if (tahun) {
+
+        // Hanya filter tahun
+        conditions.push(
+            't.tanggal_mrs >= ? AND t.tanggal_mrs < ?'
+        );
+
+        params.push(
+            `${tahun}-01-01`,
+            `${tahun + 1}-01-01`
+        );
+
+    } else if (bulan) {
+
+        // Hanya filter bulan, mencakup semua tahun
+        conditions.push('MONTH(t.tanggal_mrs) = ?');
+        params.push(bulan);
+    }
+
+    const whereSQL = conditions.length > 0
+        ? `WHERE ${conditions.join(' AND ')}`
+        : '';
+
+    return {
+        whereSQL,
+        params
+    };
+}
 function getConnection() {
     return new Promise((resolve, reject) => {
         connection.getConnection((err, conn) => {
@@ -267,6 +334,7 @@ class Model_Transaksi {
         });
     }
 
+    
 
     // --------------------------------------------------
     // Mengambil transaksi berdasarkan ID
@@ -483,6 +551,94 @@ class Model_Transaksi {
 
         return result[0].total;
     }
+
+    static async getFiltered(filters = {}, limit = 10, offset = 0) {
+
+    const { whereSQL, params } = buildFilterWhere(filters);
+
+    const sql = `
+        SELECT
+            t.*,
+
+            p.nama_perujuk,
+
+            r.nama_ruang,
+
+            d.kode_dx,
+            d.nama_kategori AS nama_kategori_dx,
+            CONCAT_WS(' - ', d.kode_dx, d.nama_kategori) AS nama_dx,
+
+            tp.nama_petugas AS nama_petugas_penerima_master,
+
+            tc.nama_petugas AS nama_petugas_pencair_master,
+
+            pr.tahun,
+            pr.bulan,
+            pr.nomor_periode
+
+        FROM transaksi_fee_rujukan t
+
+        LEFT JOIN master_perujuk p
+            ON t.id_perujuk = p.id_perujuk
+
+        LEFT JOIN master_ruang r
+            ON t.id_ruang = r.id_ruang
+
+        LEFT JOIN master_dx d
+            ON t.id_dx = d.id_dx
+
+        LEFT JOIN master_petugas tp
+            ON t.id_petugas_penerima = tp.id_petugas
+
+        LEFT JOIN master_petugas tc
+            ON t.id_petugas_pencair = tc.id_petugas
+
+        LEFT JOIN periode_fee_rujukan pr
+            ON t.id_periode = pr.id_periode
+
+        ${whereSQL}
+
+        ORDER BY t.tanggal_mrs DESC, t.id_fee DESC
+
+        LIMIT ? OFFSET ?
+    `;
+
+    return queryAsync(
+        connection,
+        sql,
+        [...params, limit, offset]
+    );
+}
+static async getCountFiltered(filters = {}) {
+
+    const { whereSQL, params } = buildFilterWhere(filters);
+
+    const sql = `
+        SELECT COUNT(*) AS total
+        FROM transaksi_fee_rujukan t
+        ${whereSQL}
+    `;
+
+    const result = await queryAsync(
+        connection,
+        sql,
+        params
+    );
+
+    return Number(result[0].total);
+}
+
+static async getAvailableYears() {
+
+    const sql = `
+        SELECT DISTINCT YEAR(tanggal_mrs) AS tahun
+        FROM transaksi_fee_rujukan
+        WHERE tanggal_mrs IS NOT NULL
+        ORDER BY tahun DESC
+    `;
+
+    return queryAsync(connection, sql);
+}
 
 }
 
