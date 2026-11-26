@@ -1,0 +1,500 @@
+
+<%- include('../partials/__head.ejs') %>
+
+<%
+    const namaBulan = [
+        '',
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    ];
+
+    function formatRupiah(value) {
+        return 'Rp ' + Number(value || 0).toLocaleString('id-ID', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+    }
+
+    function formatTanggal(value) {
+        if (!value) return '-';
+
+        let tanggal;
+
+        if (value instanceof Date && !isNaN(value.getTime())) {
+
+            const tahun = value.getFullYear();
+            const bulan = String(value.getMonth() + 1).padStart(2, '0');
+            const hari = String(value.getDate()).padStart(2, '0');
+
+            tanggal = `${tahun}-${bulan}-${hari}`;
+
+        } else {
+
+            tanggal = String(value).slice(0, 10);
+
+        }
+
+        const bagian = tanggal.split('-');
+
+        if (bagian.length !== 3) return tanggal;
+
+        return `${bagian[2]}/${bagian[1]}/${bagian[0]}`;
+    }
+
+    const jumlahTransaksi = Number(periode.jumlah_transaksi || 0);
+    const totalFee = Number(periode.total_fee || 0);
+    const sisaAnggaran = Number(periode.sisa_anggaran || 0);
+%>
+
+<body>
+
+<div class="container-scroller">
+
+    <%- include('../partials/__nav.ejs') %>
+
+    <section class="pc-container">
+
+        <div class="pc-content">
+
+            <div class="main-panel w-100">
+
+                <div class="content-wrapper">
+
+                    <div class="container-fluid mt-3">
+
+                        <!-- JUDUL -->
+                        <div class="row">
+
+                            <div class="col-12">
+
+                                <div class="card">
+
+                                    <div class="card-body">
+
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center">
+
+                                            <div>
+
+                                                <h4 class="card-title mb-1">
+                                                    Detail Periode Fee Rujukan
+                                                </h4>
+
+                                                <p class="card-description mb-0">
+
+                                                    Periode <%= periode.nomor_periode %>
+                                                    -
+
+                                                    <%= namaBulan[Number(periode.bulan)] || periode.bulan %>
+                                                    <%= periode.tahun %>
+
+                                                </p>
+
+                                            </div>
+
+                                            <div class="mt-2">
+
+                                                <a
+                                                    href="/periode/rekap?tahun=<%= periode.tahun %>&bulan=<%= periode.bulan %>"
+                                                    class="btn btn-sm btn-secondary">
+
+                                                    <i class="ti-arrow-left"></i>
+                                                    Kembali ke Rekap
+
+                                                </a>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FLASH MESSAGE -->
+                        <% if (typeof success !== 'undefined' && success.length > 0) { %>
+
+                            <% success.forEach(msg => { %>
+
+                                <div class="alert alert-success alert-dismissible fade show">
+
+                                    <%= msg %>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert">
+                                    </button>
+
+                                </div>
+
+                            <% }) %>
+
+                        <% } %>
+
+
+                        <% if (typeof error !== 'undefined' && error.length > 0) { %>
+
+                            <% error.forEach(msg => { %>
+
+                                <div class="alert alert-danger alert-dismissible fade show">
+
+                                    <%= msg %>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert">
+                                    </button>
+
+                                </div>
+
+                            <% }) %>
+
+                        <% } %>
+
+
+                        <!-- ================================= -->
+                        <!-- RINGKASAN ANGGARAN -->
+                        <!-- ================================= -->
+
+                        <div class="row">
+
+                            <!-- Uang Muka -->
+                            <div class="col-md-3 mb-3">
+
+                                <div class="card">
+
+                                    <div class="card-body">
+
+                                        <p class="text-muted mb-1">
+                                            Uang Muka
+                                        </p>
+
+                                        <h5 class="mb-0">
+                                            <%= formatRupiah(periode.uang_muka) %>
+                                        </h5>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Total Fee -->
+                            <div class="col-md-3 mb-3">
+
+                                <div class="card">
+
+                                    <div class="card-body">
+
+                                        <p class="text-muted mb-1">
+                                            Total Fee ONSITE
+                                        </p>
+
+                                        <h5 class="mb-0 text-primary">
+                                            <%= formatRupiah(periode.total_fee) %>
+                                        </h5>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Jumlah Transaksi -->
+                            <div class="col-md-3 mb-3">
+
+                                <div class="card">
+
+                                    <div class="card-body">
+
+                                        <p class="text-muted mb-1">
+                                            Jumlah Transaksi
+                                        </p>
+
+                                        <h5 class="mb-0">
+                                            <%= jumlahTransaksi %> Transaksi
+                                        </h5>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Sisa Anggaran -->
+                            <div class="col-md-3 mb-3">
+
+                                <div class="card">
+
+                                    <div class="card-body">
+
+                                        <p class="text-muted mb-1">
+                                            Sisa Anggaran
+                                        </p>
+
+                                        <h5 class="mb-0 <%= sisaAnggaran <= 0 ? 'text-danger' : 'text-success' %>">
+
+                                            <%= formatRupiah(periode.sisa_anggaran) %>
+
+                                        </h5>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STATUS ANGGARAN -->
+                        <div class="mb-4">
+
+                            <% if (sisaAnggaran < 0) { %>
+
+                                <div class="alert alert-danger">
+                                    Perhatian: total fee telah melebihi uang muka periode.
+                                </div>
+
+                            <% } else if (sisaAnggaran === 0) { %>
+
+                                <div class="alert alert-warning">
+                                    Perhatian: seluruh uang muka periode sudah digunakan.
+                                </div>
+
+                            <% } else if (jumlahTransaksi === 0) { %>
+
+                                <div class="alert alert-info">
+                                    Belum ada transaksi yang dicairkan pada periode ini.
+                                </div>
+
+                            <% } else { %>
+
+                                <div class="alert alert-success">
+                                    Saldo anggaran masih tersedia.
+                                </div>
+
+                            <% } %>
+
+                        </div>
+
+
+                        <!-- ================================= -->
+                        <!-- DAFTAR TRANSAKSI -->
+                        <!-- ================================= -->
+
+                        <div class="card">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Daftar Transaksi Periode
+                                    <%= periode.nomor_periode %>
+                                </h5>
+
+                                <p class="card-description">
+
+                                    Daftar pasien yang fee rujukannya sudah dicairkan
+                                    dan dimasukkan ke periode ini.
+
+                                </p>
+
+
+                                <div class="table-responsive">
+
+                                    <table class="table table-striped table-hover table-bordered">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th>No</th>
+                                                <th>Tgl MRS</th>
+                                                <th>Nama Pasien / RM</th>
+                                                <th>Nama Pengirim</th>
+                                                <th>Status</th>
+                                                <th>Ruang</th>
+                                                <th>DX</th>
+                                                <th>JML</th>
+                                                <th>Petugas Penerima</th>
+                                                <th>Petugas Pencair</th>
+                                                <th>Keterangan</th>
+
+                                            </tr>
+
+                                        </thead>
+
+
+                                        <tbody>
+
+                                            <% if (transaksi.length > 0) { %>
+
+                                                <% transaksi.forEach((item, index) => { %>
+
+                                                    <tr>
+
+                                                        <!-- NOMOR -->
+                                                        <td>
+                                                            <%= index + 1 %>
+                                                        </td>
+
+
+                                                        <!-- TANGGAL MRS -->
+                                                        <td>
+                                                            <%= formatTanggal(item.tanggal_mrs) %>
+                                                        </td>
+
+
+                                                        <!-- PASIEN -->
+                                                        <td>
+
+                                                            <strong>
+                                                                <%= item.nama_pasien %>
+                                                            </strong>
+
+                                                            <br>
+
+                                                            <small class="text-muted">
+                                                                RM: <%= item.no_rm || '-' %>
+                                                            </small>
+
+                                                        </td>
+
+
+                                                        <!-- PERUJUK -->
+                                                        <td>
+                                                            <%= item.nama_perujuk || '-' %>
+                                                        </td>
+
+
+                                                        <!-- STATUS PASIEN -->
+                                                        <td>
+                                                            <%= item.status_pasien || '-' %>
+                                                        </td>
+
+
+                                                        <!-- RUANG -->
+                                                        <td>
+                                                            <%= item.nama_ruang || '-' %>
+                                                        </td>
+
+
+                                                        <!-- DX -->
+                                                        <td>
+                                                            <%= item.nama_dx || '-' %>
+                                                        </td>
+
+
+                                                        <!-- NOMINAL FEE -->
+                                                        <td>
+
+                                                            <strong>
+                                                                <%= formatRupiah(item.nominal_fee) %>
+                                                            </strong>
+
+                                                        </td>
+
+
+                                                        <!-- PETUGAS PENERIMA -->
+                                                        <td>
+                                                            <%= item.nama_petugas_penerima_master || '-' %>
+                                                        </td>
+
+
+                                                        <!-- PETUGAS PENCAIR -->
+                                                        <td>
+                                                            <%= item.nama_petugas_pencair_master || '-' %>
+                                                        </td>
+
+
+                                                        <!-- KETERANGAN -->
+                                                        <td>
+                                                            <%= item.keterangan || '-' %>
+                                                        </td>
+
+                                                    </tr>
+
+                                                <% }) %>
+
+
+                                                <!-- TOTAL -->
+                                                <tr class="table-light">
+
+                                                    <td colspan="7" class="text-right">
+
+                                                        <strong>
+                                                            TOTAL FEE
+                                                        </strong>
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        <strong>
+                                                            <%= formatRupiah(periode.total_fee) %>
+                                                        </strong>
+
+                                                    </td>
+
+                                                    <td colspan="3"></td>
+
+                                                </tr>
+
+
+                                            <% } else { %>
+
+                                                <tr>
+
+                                                    <td colspan="11" class="text-center">
+
+                                                        Belum ada transaksi ONSITE pada periode ini.
+
+                                                    </td>
+
+                                                </tr>
+
+                                            <% } %>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<%- include('../partials/__foot.ejs') %>
+
+</body>
+</html>

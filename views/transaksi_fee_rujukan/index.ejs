@@ -106,28 +106,29 @@
                                         <a href="/transaksi_fee_rujukan/create"
                                            class="btn btn-sm btn-info mb-3">
 
-                                            <i class="ti-plus"></i>
+                                            <i class="bi-plus-circle"></i>
                                             Input Transaksi Baru
 
                                         </a>
 
 
+                                        
                                         <!-- ================================= -->
-                                        <!-- FILTER TRANSAKSI -->
+                                        <!-- FILTER TRANSAKSI OTOMATIS -->
                                         <!-- ================================= -->
 
                                         <div class="card border mb-4">
-
                                             <div class="card-body">
 
                                                 <h5 class="mb-3">
-                                                    <i class="ti-filter"></i>
+                                                    <i class="bi-filter"></i>
                                                     Filter Transaksi
                                                 </h5>
 
                                                 <form
                                                     action="/transaksi_fee_rujukan"
-                                                    method="GET">
+                                                    method="GET"
+                                                    id="filterTransaksiForm">
 
                                                     <div class="row">
 
@@ -141,7 +142,8 @@
                                                             <select
                                                                 class="form-control"
                                                                 id="filter_status"
-                                                                name="status_pembayaran">
+                                                                name="status_pembayaran"
+                                                                onchange="this.form.submit()">
 
                                                                 <option value=""
                                                                     <%= !filters.status_pembayaran ? 'selected' : '' %>>
@@ -173,9 +175,11 @@
                                                             <select
                                                                 class="form-control"
                                                                 id="filter_bulan"
-                                                                name="bulan">
+                                                                name="bulan"
+                                                                onchange="this.form.submit()">
 
-                                                                <option value="">
+                                                                <option value=""
+                                                                    <%= !filters.bulan ? 'selected' : '' %>>
                                                                     Semua Bulan
                                                                 </option>
 
@@ -206,9 +210,11 @@
                                                             <select
                                                                 class="form-control"
                                                                 id="filter_tahun"
-                                                                name="tahun">
+                                                                name="tahun"
+                                                                onchange="this.form.submit()">
 
-                                                                <option value="">
+                                                                <option value=""
+                                                                    <%= !filters.tahun ? 'selected' : '' %>>
                                                                     Semua Tahun
                                                                 </option>
 
@@ -229,23 +235,15 @@
                                                         </div>
 
 
-                                                        <!-- Tombol -->
+                                                        <!-- Reset Filter -->
                                                         <div class="col-md-3 mb-3 d-flex align-items-end">
-
-                                                            <button
-                                                                type="submit"
-                                                                class="btn btn-primary mr-2">
-
-                                                                <i class="ti-search"></i>
-                                                                Filter
-
-                                                            </button>
 
                                                             <a
                                                                 href="/transaksi_fee_rujukan"
                                                                 class="btn btn-light">
 
-                                                                Reset
+                                                                <i class="bi-arrow-clockwise"></i>
+                                                                Reset Filter
 
                                                             </a>
 
@@ -257,6 +255,7 @@
 
                                             </div>
                                         </div>
+
 
 
                                         <!-- ================================= -->

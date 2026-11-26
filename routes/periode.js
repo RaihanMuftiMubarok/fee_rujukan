@@ -41,6 +41,87 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+// ======================================================
+// HALAMAN REKAP PERIODE
+// URL: /periode/rekap
+// ======================================================
+
+router.get('/rekap', async (req, res, next) => {
+
+    try {
+
+        // ==========================================
+        // Validasi filter tahun
+        // ==========================================
+
+        const tahunRaw = String(req.query.tahun ?? '').trim();
+
+        let tahun = '';
+
+        if (
+            /^\d{4}$/.test(tahunRaw) &&
+            Number(tahunRaw) >= 2000 &&
+            Number(tahunRaw) <= 2100
+        ) {
+            tahun = Number(tahunRaw);
+        }
+
+
+        // ==========================================
+        // Validasi filter bulan
+        // ==========================================
+
+        const bulanRaw = String(req.query.bulan ?? '').trim();
+
+        let bulan = '';
+
+        if (/^(?:[1-9]|1[0-2])$/.test(bulanRaw)) {
+            bulan = Number(bulanRaw);
+        }
+
+
+        // ==========================================
+        // Ambil rekap periode
+        // ==========================================
+
+        const filters = {
+            tahun,
+            bulan
+        };
+
+        const data = await Model_Periode.getRekap(filters);
+
+        // Ambil daftar tahun untuk dropdown
+        const tahunList = await Model_Periode.getYears();
+
+
+        // ==========================================
+        // Tampilkan halaman
+        // ==========================================
+
+        res.render('periode/rekap', {
+
+            data,
+
+            tahunList,
+
+            filters,
+
+            success: req.flash('success'),
+            error: req.flash('error')
+
+        });
+
+    } catch (error) {
+
+        console.error('Error halaman rekap periode:', error);
+
+        next(error);
+
+    }
+
+});
+
 router.get('/users', async function (req, res, next) {
     try {
         let rows = await Model_Periode.getAll();
@@ -293,31 +374,70 @@ router.post('/delete/:id', async (req, res) => {
     }
 });
 
-router.get('/detail/:id_periode', async (req, res) => {
-    try {
-        const id = req.params.id_periode;
-        const periode = await Model_Periode.getById(id);
+// ======================================================
+// DETAIL PERIODE
+// URL: /periode/detail/:id_periode
+// ======================================================
 
-        if (!periode) {
-            req.flash('invalid', 'periode tidak ditemukan');
-            return res.redirect('/users');
+router.get('/detail/:id_periode', async (req, res, next) => {
+
+    try {
+
+        // ID dipertahankan sebagai string karena BIGINT UNSIGNED.
+        const id_periode = String(
+            req.params.id_periode ?? ''
+        );
+
+        // Validasi ID
+        if (!/^[1-9]\d*$/.test(id_periode)) {
+
+            req.flash('error', 'ID periode tidak valid.');
+
+            return res.redirect('/periode/rekap');
         }
 
-        res.render('periode/users/detail', {
+
+        // Ambil ringkasan periode
+        const periode = await Model_Periode.getRekapById(
+            id_periode
+        );
+
+
+        // Jika periode tidak ditemukan
+        if (!periode) {
+
+            req.flash('error', 'Data periode tidak ditemukan.');
+
+            return res.redirect('/periode/rekap');
+        }
+
+
+        // Ambil semua transaksi ONSITE pada periode tersebut
+        const transaksi = await Model_Periode.getTransaksiByPeriode(
+            id_periode
+        );
+
+
+        // Tampilkan halaman detail
+        res.render('periode/detail', {
+
             periode,
-            recentPosts,
-            user: {
-                nama: req.session.nama,
-                foto: req.session.foto,
-                role: req.session.role,
-            },
+            transaksi,
+
+            success: req.flash('success'),
+            error: req.flash('error')
+
         });
 
-    } catch (err) {
-        console.error(err);
-        req.flash('invalid', 'Terjadi kesalahan saat memuat periode');
-        res.redirect('/users');
+
+    } catch (error) {
+
+        console.error('Error halaman detail periode:', error);
+
+        next(error);
+
     }
+
 });
 
 
