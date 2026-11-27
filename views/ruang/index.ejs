@@ -16,7 +16,8 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <h4 class="card-title">Data Ruang</h4>
-                                                    <a href="/ruang/create" class="btn btn-sm btn-success mb-3">Tambah
+                                                    <a href="/ruang/create" class="btn btn-sm btn-info mb-3">
+                                                        <i class="bi bi-plus-circle"></i> Tambah
                                                         Ruang</a>
                                                     <div class="table-responsive">
                                                         <table class="table table-striped">
@@ -53,13 +54,15 @@
                                                                         
                                                                         <td>
                                                                             <a href="/ruang/edit/<%= data[i].id_ruang %>"
-                                                                                class="btn btn-sm btn-warning">Edit</a>
+                                                                                class="btn btn-sm btn-warning">
+                                                                                <i class="ti ti-edit"></i>
+                                                                            </a>
                                                                             <!-- Tombol untuk trigger modal -->
                                                                             <button type="button"
                                                                                 class="btn btn-sm btn-danger"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#deleteModal<%= data[i].id_ruang %>">
-                                                                                Delete
+                                                                                <i class="ti ti-trash"></i>
                                                                             </button>
                                                                         </td>
                                                                         <!-- Modal Konfirmasi -->

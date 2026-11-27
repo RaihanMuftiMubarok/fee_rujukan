@@ -105,19 +105,41 @@
 
 
                                         <!-- TOMBOL AKSI -->
-                                        <div class="mb-3">
+                                        <div class="mb-3  align-items-center">
 
-                                            <a
-                                                href="/periode"
-                                                class="btn btn-sm btn-secondary">
-
-                                                <i class="ti-arrow-left"></i>
+                                            <a href="/periode"
+                                            class="btn btn-sm btn-secondary mr-2">
+                                                <i class="bi-arrow-left"></i>
                                                 Kembali ke Data Periode
-
                                             </a>
 
-                                        </div>
+                                            <% if (filters.tahun && filters.bulan) { %>
 
+                                                <a
+                                                    href="/periode/rekap/export?tahun=<%= filters.tahun %>&bulan=<%= filters.bulan %>"
+                                                    class="btn btn-sm btn-success">
+
+                                                    <i class="bi-download"></i>
+                                                    Ekspor Excel
+
+                                                </a>
+
+                                            <% } else { %>
+
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-success"
+                                                    onclick="alert('Silakan pilih bulan dan tahun terlebih dahulu sebelum mengekspor Excel.')"
+                                                    title="Pilih tahun dan bulan terlebih dahulu">
+
+                                                    <i class="bi-download"></i>
+                                                    Ekspor Excel
+
+                                                </button>
+
+                                            <% } %>
+
+                                        </div>
 
                                         <!-- FILTER -->
                                         <div class="card border mb-4">
@@ -125,7 +147,7 @@
                                             <div class="card-body">
 
                                                 <h5 class="mb-3">
-                                                    <i class="ti-filter"></i>
+                                                    <i class="bi-filter"></i>
                                                     Filter Rekap Periode
                                                 </h5>
 
@@ -210,7 +232,7 @@
                                                                 href="/periode/rekap"
                                                                 class="btn btn-light">
 
-                                                                <i class="ti-reload"></i>
+                                                                <i class="bi-arrow-counterclockwise"></i>
                                                                 Reset Filter
 
                                                             </a>
@@ -369,7 +391,7 @@
                                                                         href="/periode/detail/<%= item.id_periode %>"
                                                                         class="btn btn-sm btn-info">
 
-                                                                        <i class="ti-eye"></i>
+                                                                        <i class="bi-eye"></i>
                                                                         Detail
 
                                                                     </a>

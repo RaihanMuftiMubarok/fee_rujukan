@@ -24,13 +24,13 @@
 
                                             <div class="mb-3">
 
-                                                <a href="/periode/create" class="btn btn-sm btn-success">
-                                                    <i class="ti-plus"></i>
+                                                <a href="/periode/create" class="btn btn-sm btn-info">
+                                                    <i class="bi-plus-circle"></i>
                                                     Tambah Periode
                                                 </a>
 
-                                                <a href="/periode/rekap" class="btn btn-sm btn-info">
-                                                    <i class="ti-bar-chart"></i>
+                                                <a href="/periode/rekap" class="btn btn-sm btn-success">
+                                                    <i class="bi-bar-chart"></i>
                                                     Rekap Anggaran
                                                 </a>
 
@@ -106,7 +106,7 @@
 
                                                                             <a href="/periode/edit/<%= data[i].id_periode %>"
                                                                                class="btn btn-sm btn-warning mr-2">
-                                                                                Edit
+                                                                                <i class="ti ti-edit"></i>
                                                                             </a>
 
                                                                             <button
@@ -114,7 +114,7 @@
                                                                                 class="btn btn-sm btn-danger"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#deleteModal<%= data[i].id_periode %>">
-                                                                                Hapus
+                                                                                <i class="ti ti-trash"></i>
                                                                             </button>
 
                                                                         </div>

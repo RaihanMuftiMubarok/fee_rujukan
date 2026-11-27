@@ -321,6 +321,69 @@ class Model_Periode {
         });
     }
 
+    // Mengambil transaksi ONSITE untuk kebutuhan ekspor Excel
+    static async getTransaksiExportByPeriode(id_periode) {
+
+        return new Promise((resolve, reject) => {
+
+            const sql = `
+                SELECT
+                    t.id_fee,
+                    t.nama_pasien,
+                    CAST(t.no_rm AS CHAR) AS no_rm,
+                    t.status_pasien,
+                    t.tanggal_mrs,
+                    t.nominal_fee,
+
+                    p.nama_perujuk,
+
+                    r.nama_ruang,
+
+                    d.kode_dx,
+
+                    tp.nama_petugas AS nama_petugas_penerima,
+
+                    tc.nama_petugas AS nama_petugas_pencair
+
+                FROM transaksi_fee_rujukan t
+
+                LEFT JOIN master_perujuk p
+                    ON t.id_perujuk = p.id_perujuk
+
+                LEFT JOIN master_ruang r
+                    ON t.id_ruang = r.id_ruang
+
+                LEFT JOIN master_dx d
+                    ON t.id_dx = d.id_dx
+
+                LEFT JOIN master_petugas tp
+                    ON t.id_petugas_penerima = tp.id_petugas
+
+                LEFT JOIN master_petugas tc
+                    ON t.id_petugas_pencair = tc.id_petugas
+
+                WHERE
+                    t.id_periode = ?
+                    AND t.status_pembayaran = 'ONSITE'
+
+                ORDER BY
+                    t.tanggal_mrs ASC,
+                    t.id_fee ASC
+            `;
+
+            connection.query(sql, [id_periode], (err, rows) => {
+
+                if (err) {
+                    return reject(err);
+                }
+
+                resolve(rows);
+
+            });
+
+        });
+    }
+
 }
 
 module.exports = Model_Periode;
